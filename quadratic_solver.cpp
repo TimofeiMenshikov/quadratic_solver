@@ -6,8 +6,12 @@
 
 void initialization(double *variables)
 {
-    scanf("%lf %lf %lf", &variables[0], &variables[1], &variables[2]) ;
+    int num_of_variables = 0;
 
+    while (num_of_variables != 3)
+    {
+        num_of_variables = scanf("%lf %lf %lf", &variables[0], &variables[1], &variables[2]) ;
+    }
 }
 
 
