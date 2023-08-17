@@ -4,30 +4,58 @@
 
 #define EPS 0.0000001
 
-void initialization(double *variables)
-{
-    int num_of_variables = 0;
+enum number_of_solutions{inf_solutions = -1, zero_solutions, one_solution, two_solutions};
 
-    while (num_of_variables != 3)
-    {
-        num_of_variables = scanf("%lf %lf %lf", &variables[0], &variables[1], &variables[2]) ;
-    }
+
+void initialization(double *coefficients);
+void print_solutions(double *solutions, int num_of_solutions);
+int solve_quadratic(double *coefficients, double *solutions);
+int main()
+{
+
+    double coefficients[3] = {0.0, 0.0, 0.0}; // a, b, c
+    double solutions[2] = {0.0, 0.0}; // x1, x2
+
+    int num_of_solutions = 0;
+
+    initialization(coefficients);
+    num_of_solutions = solve_quadratic(coefficients, solutions);
+
+    print_solutions(solutions, num_of_solutions);
+
+    return 0;
 }
 
 
-int solve(double *variables, double *solutions)
+
+
+void initialization(double *coefficients)
+{
+    int num_of_coefficients = 0;
+
+    while (num_of_coefficients != 3)
+    {
+        num_of_coefficients = scanf("%lf %lf %lf", &coefficients[0], &coefficients[1], &coefficients[2]) ;
+
+    }
+
+
+}
+
+
+int solve_quadratic(double *coefficients, double *solutions)
 {
     int num_of_solutions = 0;
 
-    double a = variables[0];
+    double a = coefficients[0];
 
-    double b = variables[1];
+    double b = coefficients[1];
 
-    double c = variables[2];
+    double c = coefficients[2];
 
     if (a == 0)
     {
-        num_of_solutions = 1;
+        num_of_solutions = one_solution;
         double x = - c / b;
         solutions[0] = x;
 
@@ -38,9 +66,10 @@ int solve(double *variables, double *solutions)
 
         if (d > EPS)
         {
-            num_of_solutions = 2;
-            double x1 = (-b + sqrt(d)) / (2 * a);
-            double x2 = (-b - sqrt(d)) / (2 * a);
+            num_of_solutions = two_solutions;
+            double root_of_d = sqrt(d);
+            double x1 = (-b + root_of_d) / (2 * a);
+            double x2 = (-b - root_of_d) / (2 * a);
 
             solutions[0] = x1;
             solutions[1] = x2;
@@ -49,11 +78,11 @@ int solve(double *variables, double *solutions)
         }
         else if (d < -EPS)
         {
-            num_of_solutions = 0;
+            num_of_solutions = zero_solutions;
         }
         else
         {
-            num_of_solutions = 1;
+            num_of_solutions = one_solution;
 
             double x = -b / (2  * a);
 
@@ -63,38 +92,14 @@ int solve(double *variables, double *solutions)
     return num_of_solutions;
 }
 
-void print(double *solutions, int num_of_solutions)
+void print_solutions(double *solutions, int num_of_solutions)
 {
-    if (num_of_solutions == 1)
-    {
-        printf("1 решение в действительных числах\n");
-    }
-    else
-    {
-        printf("%d решений в действительных числах\n", num_of_solutions);
-    }
+    printf("%d solution(s) in real numbers\n", num_of_solutions);
+
 
     for (int i = 0; i < num_of_solutions; i++)
     {
        printf("x%d = %f ", i + 1, solutions[i]);
     }
 
-}
-
-
-
-int main()
-{
-
-    double variables[3] = {0.0, 0.0, 0.0}; // a, b, c
-    double solutions[2] = {0.0, 0.0}; // x1, x2
-
-    int num_of_solutions = 0;
-
-    initialization(variables);
-    num_of_solutions = solve(variables, solutions);
-
-    print(solutions, num_of_solutions);
-
-    return 0;
 }
