@@ -16,8 +16,8 @@ int solve_equation(double* coefficients, double* solutions);
 int main()
 {
 
-    double coefficients[3] = {0.0, 0.0, 0.0}; // a, b, c
-    double solutions[2] = {0.0, 0.0}; // x1, x2
+    double coefficients[3] = {nan(""), nan(""), nan("")}; // a, b, c
+    double solutions[2] = {nan(""), nan("")}; // x1, x2
 
     int num_of_solutions = nan("");
 
@@ -160,3 +160,5 @@ void print_solutions(double* solutions, int num_of_solutions)
     }
 
 }
+
+
