@@ -4,6 +4,7 @@
 
 #define EPS 0.0000001
 
+#define MAXSTR 1000
 
 enum number_of_solutions{inf_solutions = -1, zero_solutions, one_solution, two_solutions};
 
@@ -13,7 +14,8 @@ struct Coefficients
     double b;
     double c;
 };
-struct Coefficients coef_input_from_file(struct Coefficients coefficients);
+void test(int number_of_tests);
+struct Coefficients coef_input_from_file(struct Coefficients coefficients, FILE* inputfile);
 struct Coefficients coef_input(struct Coefficients coefficients);
 void print_solutions(double* solutions, int num_of_solutions);
 int solve_quadratic(struct Coefficients coefficients, double* solutions);
@@ -23,15 +25,8 @@ int main()
 {
 
 
-    struct Coefficients coefficients = {nan(""), nan(""), nan("")}; // a, b, c
-    double solutions[2] = {nan(""), nan("")}; // x1, x2
 
-    int num_of_solutions = nan("");
-
-    coefficients = coef_input_from_file(coefficients);
-    num_of_solutions = solve_equation(coefficients, solutions);
-
-    print_solutions(solutions, num_of_solutions);
+    test(2);
 
     return 0;
 }
@@ -40,14 +35,8 @@ int main()
 
 
 
-struct Coefficients coef_input_from_file(struct Coefficients coefficients)
+struct Coefficients coef_input_from_file(struct Coefficients coefficients, FILE* inputfile)
 {
-    FILE* inputfile;
-
-    inputfile = fopen("input.txt", "r");
-
-
-
 
     fscanf(inputfile, "%lf %lf %lf", &coefficients.a, &coefficients.b, &coefficients.c);
 
@@ -107,7 +96,7 @@ int solve_linear(struct Coefficients coefficients, double* solutions)
 
 
 
-    if (coefficients.b != 0)
+    if (fabs(coefficients.b) >= EPS)
     {
         num_of_solutions = one_solution;
         double x = - coefficients.c / coefficients.b;
@@ -116,7 +105,7 @@ int solve_linear(struct Coefficients coefficients, double* solutions)
     }
     else
     {
-        if (coefficients.c != 0)
+        if (fabs(coefficients.c) >= EPS)
         {
             num_of_solutions = zero_solutions;
         }
@@ -178,6 +167,50 @@ void print_solutions(double* solutions, int num_of_solutions)
     {
        printf("x%d = %f ", i + 1, solutions[i]);
     }
+
+    printf("\n");
+
+}
+
+
+void test(int number_of_tests)
+{
+    FILE* inputfile;
+    inputfile = fopen("input.txt", "r");
+
+    struct Coefficients coefficients = {nan(""), nan(""), nan("")}; // a, b, c
+    double solutions[2] = {nan(""), nan("")}; // x1, x2
+
+
+    int num_of_solutions = nan("");
+
+    char coef_names[MAXSTR];
+
+    fgets(coef_names, MAXSTR, inputfile);
+
+    for (int i = 0; i < number_of_tests; i++)
+    {
+        coefficients = {nan(""), nan(""), nan("")};
+
+        for (int j = 0; j < 2; j++)
+        {
+
+            solutions[j] = nan("");
+
+        }
+
+        coefficients = coef_input_from_file(coefficients, inputfile);
+
+
+        num_of_solutions = solve_equation(coefficients, solutions);
+
+        print_solutions(solutions, num_of_solutions);
+
+
+    }
+
+
+
 
 }
 
