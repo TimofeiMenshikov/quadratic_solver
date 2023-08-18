@@ -3,7 +3,6 @@
 #include <TXLib.h>
 
 #define EPS 0.0000001
-#define MAXSTR 1000
 
 
 enum number_of_solutions{inf_solutions = -1, zero_solutions, one_solution, two_solutions};
