@@ -6,22 +6,27 @@
 
 enum number_of_solutions{inf_solutions = -1, zero_solutions, one_solution, two_solutions};
 
+struct Coefficients
+{
+    double a;
+    double b;
+    double c;
+};
 
-
-void coef_input(double* coefficients);
+struct Coefficients coef_input(struct Coefficients coefficients);
 void print_solutions(double* solutions, int num_of_solutions);
-int solve_quadratic(double* coefficients, double* solutions);
-int solve_linear(double* coefficients, double* solutions);
-int solve_equation(double* coefficients, double* solutions);
+int solve_quadratic(struct Coefficients coefficients, double* solutions);
+int solve_linear(struct Coefficients coefficients, double* solutions);
+int solve_equation(struct Coefficients coefficients, double* solutions);
 int main()
 {
 
-    double coefficients[3] = {nan(""), nan(""), nan("")}; // a, b, c
+    struct Coefficients coefficients = {nan(""), nan(""), nan("")}; // a, b, c
     double solutions[2] = {nan(""), nan("")}; // x1, x2
 
     int num_of_solutions = nan("");
 
-    coef_input(coefficients);
+    coefficients = coef_input(coefficients);
     num_of_solutions = solve_equation(coefficients, solutions);
 
     print_solutions(solutions, num_of_solutions);
@@ -32,25 +37,30 @@ int main()
 
 
 
-void coef_input(double* coefficients)
+struct Coefficients coef_input(struct Coefficients coefficients)
 {
     int num_of_coefficients = nan("");
 
     while (num_of_coefficients != 3)
     {
-        num_of_coefficients = scanf("%lf %lf %lf", &coefficients[0], &coefficients[1], &coefficients[2]) ;
+        num_of_coefficients = scanf("%lf %lf %lf", &coefficients.a, &coefficients.b, &coefficients.c) ;
 
     }
+
+    return coefficients;
+
+
 
 
 }
 
-int solve_equation(double* coefficients, double* solutions)
+int solve_equation(struct Coefficients coefficients, double* solutions)
 {
-    double a = coefficients[0];
+
+
 
     int num_of_solutions = nan("");
-    if (a == 0)
+    if (fabs(coefficients.a) < EPS)
     {
         num_of_solutions = solve_linear(coefficients, solutions);
 
@@ -66,27 +76,23 @@ int solve_equation(double* coefficients, double* solutions)
 
 }
 
-int solve_linear(double* coefficients, double* solutions)
+int solve_linear(struct Coefficients coefficients, double* solutions)
 {
 
     int num_of_solutions = nan("");
 
-    double a = coefficients[0];
 
-    double b = coefficients[1];
 
-    double c = coefficients[2];
-
-    if (b != 0)
+    if (coefficients.b != 0)
     {
         num_of_solutions = one_solution;
-        double x = - c / b;
+        double x = - coefficients.c / coefficients.b;
         solutions[0] = x;
 
     }
     else
     {
-        if (c != 0)
+        if (coefficients.c != 0)
         {
             num_of_solutions = zero_solutions;
         }
@@ -97,35 +103,25 @@ int solve_linear(double* coefficients, double* solutions)
     }
     return num_of_solutions;
 
-
-
 }
 
 
-int solve_quadratic(double* coefficients, double* solutions)
+int solve_quadratic(struct Coefficients coefficients, double* solutions)
 {
 
     int num_of_solutions = nan("");
-    double a = coefficients[0];
 
-    double b = coefficients[1];
-
-    double c = coefficients[2];
-
-
-    double d = b * b - 4 * a * c;
+    double d = coefficients.b * coefficients.b - 4 * coefficients.a * coefficients.c;
 
     if (d > EPS)
     {
         num_of_solutions = two_solutions;
         double root_of_d = sqrt(d);
-        double x1 = (-b + root_of_d) / (2 * a);
-        double x2 = (-b - root_of_d) / (2 * a);
+        double x1 = (-coefficients.b + root_of_d) / (2 * coefficients.a);
+        double x2 = (-coefficients.b - root_of_d) / (2 * coefficients.a);
 
         solutions[0] = x1;
         solutions[1] = x2;
-
-
     }
     else if (d < -EPS)
     {
@@ -135,7 +131,7 @@ int solve_quadratic(double* coefficients, double* solutions)
     {
         num_of_solutions = one_solution;
 
-        double x = -b / (2  * a);
+        double x = -coefficients.b / (2  * coefficients.a);
 
         solutions[0] = x;
     }
