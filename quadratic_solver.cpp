@@ -3,6 +3,8 @@
 #include <TXLib.h>
 
 #define EPS 0.0000001
+#define MAXSTR 1000
+
 
 enum number_of_solutions{inf_solutions = -1, zero_solutions, one_solution, two_solutions};
 
@@ -12,7 +14,7 @@ struct Coefficients
     double b;
     double c;
 };
-
+struct Coefficients coef_input_from_file(struct Coefficients coefficients);
 struct Coefficients coef_input(struct Coefficients coefficients);
 void print_solutions(double* solutions, int num_of_solutions);
 int solve_quadratic(struct Coefficients coefficients, double* solutions);
@@ -21,18 +23,41 @@ int solve_equation(struct Coefficients coefficients, double* solutions);
 int main()
 {
 
+
     struct Coefficients coefficients = {nan(""), nan(""), nan("")}; // a, b, c
     double solutions[2] = {nan(""), nan("")}; // x1, x2
 
     int num_of_solutions = nan("");
 
-    coefficients = coef_input(coefficients);
+    coefficients = coef_input_from_file(coefficients);
     num_of_solutions = solve_equation(coefficients, solutions);
 
     print_solutions(solutions, num_of_solutions);
 
     return 0;
 }
+
+
+
+
+
+struct Coefficients coef_input_from_file(struct Coefficients coefficients)
+{
+    FILE* inputfile;
+
+    inputfile = fopen("input.txt", "r");
+
+
+
+
+    fscanf(inputfile, "%lf %lf %lf", &coefficients.a, &coefficients.b, &coefficients.c);
+
+    return coefficients;
+
+
+}
+
+
 
 
 
@@ -156,5 +181,4 @@ void print_solutions(double* solutions, int num_of_solutions)
     }
 
 }
-
 
