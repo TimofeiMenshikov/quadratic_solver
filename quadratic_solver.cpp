@@ -14,7 +14,7 @@ struct Coefficients
     double b;
     double c;
 };
-void test(int number_of_tests);
+void test();
 struct Coefficients coef_input_from_file(struct Coefficients coefficients, FILE* inputfile);
 struct Coefficients coef_input(struct Coefficients coefficients);
 void print_solutions(double* solutions, int num_of_solutions);
@@ -26,7 +26,7 @@ int main()
 
 
 
-    test(2);
+    test();
 
     return 0;
 }
@@ -173,7 +173,7 @@ void print_solutions(double* solutions, int num_of_solutions)
 }
 
 
-void test(int number_of_tests)
+void test()
 {
     FILE* inputfile;
     inputfile = fopen("input.txt", "r");
@@ -188,18 +188,14 @@ void test(int number_of_tests)
 
     fgets(coef_names, MAXSTR, inputfile);
 
-    for (int i = 0; i < number_of_tests; i++)
+
+
+
+    while (fscanf(inputfile, "%lf %lf %lf", &coefficients.a, &coefficients.b, &coefficients.c) != EOF)
     {
-        coefficients = {nan(""), nan(""), nan("")};
 
-        for (int j = 0; j < 2; j++)
-        {
 
-            solutions[j] = nan("");
 
-        }
-
-        coefficients = coef_input_from_file(coefficients, inputfile);
 
 
         num_of_solutions = solve_equation(coefficients, solutions);
@@ -213,4 +209,5 @@ void test(int number_of_tests)
 
 
 }
+
 
