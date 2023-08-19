@@ -104,7 +104,7 @@ int solve_linear(struct Coefficients coefficients, double* solutions)
 int solve_quadratic(struct Coefficients coefficients, double* solutions)
 {
 
-    int num_of_solutions = nan("");
+    int num_of_solutions = 0;
 
     double d = coefficients.b * coefficients.b - 4 * coefficients.a * coefficients.c;
 
@@ -112,7 +112,7 @@ int solve_quadratic(struct Coefficients coefficients, double* solutions)
     {
         num_of_solutions = two_solutions;
 
-        double root_of_d = sqrt(d
+        double root_of_d = sqrt(d);
 
         double x1 = (-coefficients.b + root_of_d) / (2 * coefficients.a);
         double x2 = (-coefficients.b - root_of_d) / (2 * coefficients.a);
@@ -162,9 +162,9 @@ void test()
     FILE* inputfile;
     inputfile = fopen("input.txt", "r");
 
-    struct Coefficients coefficients = {nan(""), nan(""), nan("")}; // a, b, c
+    struct Coefficients coefficients = {NAN, NAN, NAN}; // a, b, c
 
-    double solutions[2] = {nan(""), nan("")}; // x1, x2
+    double solutions[2] = {NAN, NAN}; // x1, x2
 
     int num_of_solutions = 0;
 
@@ -179,6 +179,5 @@ void test()
         print_solutions(solutions, num_of_solutions);
     }
 }
-
 
 
