@@ -6,7 +6,7 @@
 
 #define MAXSTR 1000
 
-enum number_of_solutions{inf_solutions = -1, zero_solutions, one_solution, two_solutions};
+enum number_of_solutions{inf_solutions = -1, zero_solutions = 0, one_solution = 1, two_solutions = 2};
 
 struct Coefficients
 {
@@ -179,5 +179,4 @@ void test()
         print_solutions(solutions, num_of_solutions);
     }
 }
-
 
