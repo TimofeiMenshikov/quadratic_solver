@@ -3,7 +3,6 @@
 #include <TXLib.h>
 
 #define EPS 0.0000001
-
 #define MAXSTR 1000
 
 enum number_of_solutions{inf_solutions = -1, zero_solutions = 0, one_solution = 1, two_solutions = 2};
@@ -25,7 +24,18 @@ int solve_linear(struct Coefficients coefficients, double* solutions);
 int solve_equation(struct Coefficients coefficients, double* solutions);
 int main()
 {
-    test();
+
+    #ifdef TEST
+        test();
+    #else
+        struct Coefficients coefficients = {NAN, NAN, NAN}; // a, b, c
+        double solutions[2] = {NAN, NAN}; // x1, x2
+        int num_of_solutions = NAN;
+        coefficients = coef_input(coefficients);
+        num_of_solutions = solve_equation(coefficients, solutions);
+        print_solutions(solutions, num_of_solutions);
+    #endif
+
     return 0;
 }
 
@@ -33,7 +43,7 @@ int main()
 struct Coefficients coef_input_from_file(struct Coefficients coefficients, FILE* inputfile)
 {
     fscanf(inputfile, "%lf %lf %lf", &coefficients.a, &coefficients.b, &coefficients.c);
-
+    
     return coefficients;
 }
 
@@ -42,11 +52,51 @@ struct Coefficients coef_input(struct Coefficients coefficients)
 {
     int num_of_coefficients = 0;
 
-    while (num_of_coefficients != 3)
+    printf("введите 3 числа - коэффициенты a, b, c в уравнении ax^2 + bx + c = 0\n");
+
+    int is_scan_coefficient = 0;
+
+    while ((is_scan_coefficient = scanf("%lf", &coefficients.a)) == 0)
     {
-        num_of_coefficients = scanf("%lf %lf %lf", &coefficients.a, &coefficients.b, &coefficients.c) ;
+
+
+        if (is_scan_coefficient == 0)
+        {
+
+            scanf("%*s");
+        }
 
     }
+
+    printf("коэффициент a введён\n");
+
+    is_scan_coefficient = 0;
+
+    while ((is_scan_coefficient = scanf("%lf", &coefficients.b)) == 0)
+    {
+        if (is_scan_coefficient == 0)
+        {
+            scanf("%*s");
+        }
+    }
+
+    printf("коэффициет b введён\n");
+
+    is_scan_coefficient = 0;
+
+    while ((is_scan_coefficient = scanf("%lf", &coefficients.c)) == 0)
+    {
+
+
+        if (is_scan_coefficient == 0)
+        {
+            scanf("%*s");
+        }
+
+    }
+    printf("коэффициент c введён\n");
+
+
 
     return coefficients;
 }
@@ -179,4 +229,3 @@ void test()
         print_solutions(solutions, num_of_solutions);
     }
 }
-
