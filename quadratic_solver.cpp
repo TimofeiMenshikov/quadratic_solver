@@ -5,6 +5,8 @@
 #define EPS 0.0000001
 #define MAXSTR 1000
 
+#define TEST
+
 enum number_of_solutions{inf_solutions = -1, zero_solutions = 0, one_solution = 1, two_solutions = 2};
 
 struct Coefficients
@@ -22,6 +24,7 @@ void print_solutions(double* solutions, int num_of_solutions);
 int solve_quadratic(struct Coefficients coefficients, double* solutions);
 int solve_linear(struct Coefficients coefficients, double* solutions);
 int solve_equation(struct Coefficients coefficients, double* solutions);
+bool print_test(int test_number, int num_of_solutions,int right_num_of_solutions);
 int main()
 {
 
@@ -43,15 +46,15 @@ int main()
 struct Coefficients coef_input_from_file(struct Coefficients coefficients, FILE* inputfile)
 {
     fscanf(inputfile, "%lf %lf %lf", &coefficients.a, &coefficients.b, &coefficients.c);
-    
+
+
+
     return coefficients;
 }
 
 
 struct Coefficients coef_input(struct Coefficients coefficients)
 {
-    int num_of_coefficients = 0;
-
     printf("введите 3 числа - коэффициенты a, b, c в уравнении ax^2 + bx + c = 0\n");
 
     int is_scan_coefficient = 0;
@@ -206,11 +209,32 @@ void print_solutions(double* solutions, int num_of_solutions)
     printf("\n");
 }
 
+bool print_test(int test_number, int num_of_solutions, int right_num_of_solutions)
+{
+    bool is_passed = (num_of_solutions == right_num_of_solutions);
+
+    printf("test %d: ", test_number);
+
+    if (is_passed)
+    {
+        printf("OK\n");
+    }
+    else
+    {
+        printf("failed\n");
+    }
+
+    return is_passed;
+
+}
+
 
 void test()
 {
     FILE* inputfile;
     inputfile = fopen("input.txt", "r");
+
+    int right_num_of_solutions = -2;
 
     struct Coefficients coefficients = {NAN, NAN, NAN}; // a, b, c
 
@@ -218,14 +242,21 @@ void test()
 
     int num_of_solutions = 0;
 
-    char coef_names[MAXSTR];
 
-    fgets(coef_names, MAXSTR, inputfile);
+    int test_number = 0;
 
-    while (fscanf(inputfile, "%lf %lf %lf", &coefficients.a, &coefficients.b, &coefficients.c) != EOF)
+    while (fscanf(inputfile, "%lf %lf %lf %d", &coefficients.a, &coefficients.b, &coefficients.c, &right_num_of_solutions) != EOF)
     {
         num_of_solutions = solve_equation(coefficients, solutions);
 
-        print_solutions(solutions, num_of_solutions);
+        test_number++;
+
+        if (print_test(test_number, num_of_solutions, right_num_of_solutions) == false)
+        {
+            break;
+        }
     }
 }
+
+
+
