@@ -7,7 +7,7 @@
 
 #define TEST
 
-enum number_of_solutions{inf_solutions = -1, zero_solutions = 0, one_solution = 1, two_solutions = 2};
+enum number_of_solutions{invalid_number = -2, inf_solutions = -1, zero_solutions = 0, one_solution = 1, two_solutions = 2};
 
 struct Coefficients
 {
@@ -24,7 +24,10 @@ void print_solutions(double* solutions, int num_of_solutions);
 int solve_quadratic(struct Coefficients coefficients, double* solutions);
 int solve_linear(struct Coefficients coefficients, double* solutions);
 int solve_equation(struct Coefficients coefficients, double* solutions);
-bool print_test(int test_number, int num_of_solutions,int right_num_of_solutions);
+void print_test(bool is_passed, int test_number, int num_of_solutions, double* solutions, int right_num_of_solutions, double* right_answers, struct Coefficients coefficients);
+bool check_answers(int num_of_solutions, int right_num_of_solutions, double* solutions, double* right_answers);
+bool check_num_of_solutions(int num_of_solutions, int right_num_of_solutions);
+bool check_solver(double *solutions, double *right_answers, int num_of_solutions, int right_num_of_solutions);
 int main()
 {
 
@@ -198,7 +201,7 @@ void print_solutions(double* solutions, int num_of_solutions)
     }
     else
     {
-        printf("inf solutions in real numbers");
+        printf("inf solutions in real numbers\n");
     }
 
     for (int i = 0; i < num_of_solutions; i++)
@@ -209,10 +212,53 @@ void print_solutions(double* solutions, int num_of_solutions)
     printf("\n");
 }
 
-bool print_test(int test_number, int num_of_solutions, int right_num_of_solutions)
-{
-    bool is_passed = (num_of_solutions == right_num_of_solutions);
 
+bool check_answers(double* solutions, double* right_answers, int num_of_solutions)
+{
+    bool is_checked = false;
+
+
+    int matches = 0;
+
+    for (int i = 0; i < num_of_solutions; i++)
+    {
+        for (int j = 0; j < num_of_solutions; j++)
+        {
+            if ((fabs(solutions[i] - right_answers[j])) < EPS)
+            {
+                matches++;
+            }
+
+        }
+
+    }
+
+
+
+    is_checked = (matches >= num_of_solutions);
+
+    return is_checked;
+}
+
+bool check_num_of_solutions(int num_of_solutions, int right_num_of_solutions)
+{
+    return (num_of_solutions == right_num_of_solutions);
+
+}
+
+bool check_solver(double *solutions, double *right_answers, int num_of_solutions, int right_num_of_solutions)
+{
+    if (not check_num_of_solutions(num_of_solutions, right_num_of_solutions))
+    {
+        return false;
+    }
+
+    return check_answers(solutions, right_answers, num_of_solutions);
+
+}
+
+void print_test(bool is_passed, int test_number, int num_of_solutions, double* solutions, int right_num_of_solutions, double* right_answers, struct Coefficients coefficients)
+{
     printf("test %d: ", test_number);
 
     if (is_passed)
@@ -222,10 +268,45 @@ bool print_test(int test_number, int num_of_solutions, int right_num_of_solution
     else
     {
         printf("failed\n");
+
+        printf("equation: %f * x^2 + %f * x + %f = 0\n", coefficients.a, coefficients.b, coefficients.c);
+
+        printf("right answers:\n");
+
+        if (num_of_solutions != inf_solutions)
+        {
+            printf("%d solution(s) in real numbers\n", num_of_solutions);
+        }
+        else
+        {
+            printf("inf solutions in real numbers\n");
+        }
+
+        for (int i = 0; i < num_of_solutions; i++)
+        {
+           printf("x%d = %f ", i + 1, right_answers[i]);
+        }
+
+        printf("\n");
+
+        printf("computer answers:\n");
+
+        if (num_of_solutions != inf_solutions)
+        {
+            printf("%d solution(s) in real numbers\n", num_of_solutions);
+        }
+        else
+        {
+            printf("inf solutions in real numbers\n");
+        }
+
+        for (int i = 0; i < num_of_solutions; i++)
+        {
+           printf("x%d = %f ", i + 1, solutions[i]);
+        }
+
+        printf("\n");
     }
-
-    return is_passed;
-
 }
 
 
@@ -234,7 +315,7 @@ void test()
     FILE* inputfile;
     inputfile = fopen("input.txt", "r");
 
-    int right_num_of_solutions = -2;
+    int right_num_of_solutions = invalid_number;
 
     struct Coefficients coefficients = {NAN, NAN, NAN}; // a, b, c
 
@@ -242,21 +323,41 @@ void test()
 
     int num_of_solutions = 0;
 
-
+    double right_answers[2] = {NAN, NAN}; //x1, x2
+    
     int test_number = 0;
 
+    bool is_passed = false;
+
+    bool test_end = false;
+    
     while (fscanf(inputfile, "%lf %lf %lf %d", &coefficients.a, &coefficients.b, &coefficients.c, &right_num_of_solutions) != EOF)
     {
         num_of_solutions = solve_equation(coefficients, solutions);
 
-        test_number++;
+        for (int i = 0; i < right_num_of_solutions; i++)
+        {
 
-        if (print_test(test_number, num_of_solutions, right_num_of_solutions) == false)
+            if (fscanf(inputfile, "%lf", &right_answers[i]) == EOF)
+            {
+                test_end = true;
+                break;
+            }
+        }
+
+        if (test_end)
         {
             break;
+
         }
+
+        test_number++;
+
+        is_passed = (check_solver(solutions, right_answers, num_of_solutions, right_num_of_solutions));
+
+        print_test(is_passed, test_number, num_of_solutions, solutions, right_num_of_solutions, right_answers, coefficients);
+
     }
+
+
 }
-
-
-
