@@ -124,7 +124,7 @@ int solve_linear(struct Coefficients coefficients, double* solutions)
     if (fabs(coefficients.b) >= EPS)
     {
         num_of_solutions = one_solution;
-        double x = - coefficients.c / coefficients.b;
+        double x = -coefficients.c / coefficients.b;
         solutions[0] = x;
     }
     else
@@ -352,11 +352,11 @@ void test()
             break;
         }
 
-        if (right_num_of_solutions == 2)
+        if (right_num_of_solutions == two_solutions)
         {
             sscanf(answers_string, "%lf %lf", &right_answers[0], &right_answers[1]);
         }
-        else if (right_num_of_solutions == 1)
+        else if (right_num_of_solutions == one_solution)
         {
             sscanf(answers_string, "%lf", &right_answers[0], &right_answers[1]);
         }
@@ -367,5 +367,4 @@ void test()
 
         print_test(is_passed, test_number, num_of_solutions, solutions, right_num_of_solutions, right_answers, coefficients);
     }
-
 }
