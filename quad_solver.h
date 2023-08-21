@@ -10,5 +10,4 @@ int solve_linear(struct Coefficients coefficients, double* solutions);
 int solve_equation(struct Coefficients coefficients, double* solutions);
 void print_test(bool is_passed, int test_number, int num_of_solutions, double* solutions, int right_num_of_solutions, double* right_answers, struct Coefficients coefficients);
 bool check_answers(int num_of_solutions, int right_num_of_solutions, double* solutions, double* right_answers);
-bool check_num_of_solutions(int num_of_solutions, int right_num_of_solutions);
 bool check_solver(double *solutions, double *right_answers, int num_of_solutions, int right_num_of_solutions);
