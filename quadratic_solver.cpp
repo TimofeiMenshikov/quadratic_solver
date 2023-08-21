@@ -321,34 +321,37 @@ void test()
 
     double solutions[2] = {NAN, NAN}; // x1, x2
 
-    int num_of_solutions = 0;
+    int num_of_solutions = invalid_number;
 
     double right_answers[2] = {NAN, NAN}; //x1, x2
-    
+
+
     int test_number = 0;
 
     bool is_passed = false;
 
     bool test_end = false;
-    
-    while (fscanf(inputfile, "%lf %lf %lf %d", &coefficients.a, &coefficients.b, &coefficients.c, &right_num_of_solutions) != EOF)
+
+    char coef_string[MAXSTR];
+
+    char answers_string[MAXSTR];
+
+    while (not feof(inputfile))
     {
+        fgets(coef_string, MAXSTR, inputfile);
+        sscanf(coef_string, "%lf %lf %lf %d" , &coefficients.a, &coefficients.b, &coefficients.c, &right_num_of_solutions);
+
         num_of_solutions = solve_equation(coefficients, solutions);
 
-        for (int i = 0; i < right_num_of_solutions; i++)
-        {
+        fgets(coef_string, MAXSTR, inputfile);
 
-            if (fscanf(inputfile, "%lf", &right_answers[i]) == EOF)
-            {
-                test_end = true;
-                break;
-            }
+        if (right_num_of_solutions == 2)
+        {
+            sscanf(coef_string, "%lf %lf", &right_answers[0], &right_answers[1]);
         }
-
-        if (test_end)
+        else if (right_num_of_solutions == 1)
         {
-            break;
-
+            sscanf(coef_string, "%lf", &right_answers[0]);
         }
 
         test_number++;
@@ -356,8 +359,6 @@ void test()
         is_passed = (check_solver(solutions, right_answers, num_of_solutions, right_num_of_solutions));
 
         print_test(is_passed, test_number, num_of_solutions, solutions, right_num_of_solutions, right_answers, coefficients);
-
     }
-
 
 }
