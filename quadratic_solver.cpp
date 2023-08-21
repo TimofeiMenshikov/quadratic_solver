@@ -2,10 +2,10 @@
 #include <math.h>
 #include <TXLib.h>
 
-#define EPS 0.0000001
 #define MAXSTR 1000
-
 #define TEST
+
+const double EPS = 0.0000001;
 
 enum number_of_solutions{invalid_number = -2, inf_solutions = -1, zero_solutions = 0, one_solution = 1, two_solutions = 2};
 
@@ -313,14 +313,15 @@ void test()
     inputfile = fopen("input.txt", "r");
 
     int right_num_of_solutions = invalid_number;
+    int num_of_solutions = invalid_number;
 
     struct Coefficients coefficients = {NAN, NAN, NAN}; // a, b, c
 
     double solutions[2] = {NAN, NAN}; // x1, x2
-
-    int num_of_solutions = invalid_number;
-
     double right_answers[2] = {NAN, NAN}; //x1, x2
+
+
+
 
     int test_number = 0;
 
