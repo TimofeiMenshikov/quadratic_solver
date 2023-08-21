@@ -233,8 +233,6 @@ bool check_answers(double* solutions, double* right_answers, int num_of_solution
 
     }
 
-
-
     is_checked = (matches >= num_of_solutions);
 
     return is_checked;
@@ -264,6 +262,7 @@ void print_test(bool is_passed, int test_number, int num_of_solutions, double* s
     if (is_passed)
     {
         printf("OK\n");
+        printf("equation: %f * x^2 + %f * x + %f = 0\n", coefficients.a, coefficients.b, coefficients.c);
     }
     else
     {
@@ -336,22 +335,40 @@ void test()
 
     char answers_string[MAXSTR];
 
-    while (not feof(inputfile))
+    while (true)
     {
         fgets(coef_string, MAXSTR, inputfile);
+
+
+        coefficients.a = NAN;
+        coefficients.b = NAN;
+        coefficients.c = NAN;
+
+        num_of_solutions = invalid_number;
+
+        right_answers[0] = NAN;
+        right_answers[1] = NAN;
+
+
         sscanf(coef_string, "%lf %lf %lf %d" , &coefficients.a, &coefficients.b, &coefficients.c, &right_num_of_solutions);
 
         num_of_solutions = solve_equation(coefficients, solutions);
 
-        fgets(coef_string, MAXSTR, inputfile);
+        if (fgets(coef_string, MAXSTR, inputfile) == NULL)
+        {
+            break;
+        }
 
         if (right_num_of_solutions == 2)
         {
             sscanf(coef_string, "%lf %lf", &right_answers[0], &right_answers[1]);
+
+
         }
         else if (right_num_of_solutions == 1)
         {
-            sscanf(coef_string, "%lf", &right_answers[0]);
+            sscanf(coef_string, "%lf", &right_answers[0], &right_answers[1]);
+
         }
 
         test_number++;
