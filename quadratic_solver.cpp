@@ -300,6 +300,13 @@ void nulling_coefficients(struct Coefficients* coef_pointer)
 }
 
 
+void nulling_answers(double* solutions)
+{
+    solutions[0] = NAN;
+    solutions[1] = NAN;
+}
+
+
 void test()
 {
     FILE* inputfile;
@@ -330,11 +337,11 @@ void test()
         fgets(coef_string, MAXSTR, inputfile);
 
         nulling_coefficients(&coefficients);
+        nulling_answers(solutions);
+        nulling_answers(right_answers);
 
         num_of_solutions = invalid_number;
-
-        right_answers[0] = NAN;
-        right_answers[1] = NAN;
+        right_num_of_solutions = invalid_number;
 
         sscanf(coef_string, "%lf %lf %lf %d" , &coefficients.a, &coefficients.b, &coefficients.c, &right_num_of_solutions);
 
@@ -362,13 +369,3 @@ void test()
     }
 
 }
-
-
-
-
-
-
-
-
-
-
