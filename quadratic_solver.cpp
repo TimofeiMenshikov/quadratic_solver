@@ -30,7 +30,6 @@ bool check_num_of_solutions(int num_of_solutions, int right_num_of_solutions);
 bool check_solver(double *solutions, double *right_answers, int num_of_solutions, int right_num_of_solutions);
 int main()
 {
-
     #ifdef TEST
         test();
     #else
@@ -50,8 +49,6 @@ struct Coefficients coef_input_from_file(struct Coefficients coefficients, FILE*
 {
     fscanf(inputfile, "%lf %lf %lf", &coefficients.a, &coefficients.b, &coefficients.c);
 
-
-
     return coefficients;
 }
 
@@ -64,14 +61,10 @@ struct Coefficients coef_input(struct Coefficients coefficients)
 
     while ((is_scan_coefficient = scanf("%lf", &coefficients.a)) == 0)
     {
-
-
         if (is_scan_coefficient == 0)
         {
-
             scanf("%*s");
         }
-
     }
 
     printf("коэффициент a введён\n");
@@ -92,17 +85,12 @@ struct Coefficients coef_input(struct Coefficients coefficients)
 
     while ((is_scan_coefficient = scanf("%lf", &coefficients.c)) == 0)
     {
-
-
         if (is_scan_coefficient == 0)
         {
             scanf("%*s");
         }
-
     }
     printf("коэффициент c введён\n");
-
-
 
     return coefficients;
 }
@@ -111,7 +99,7 @@ struct Coefficients coef_input(struct Coefficients coefficients)
 int solve_equation(struct Coefficients coefficients, double* solutions)
 {
 
-    int num_of_solutions = 0;
+    int num_of_solutions = invalid_number;
 
     if (fabs(coefficients.a) < EPS)
     {
@@ -131,8 +119,7 @@ int solve_equation(struct Coefficients coefficients, double* solutions)
 
 int solve_linear(struct Coefficients coefficients, double* solutions)
 {
-
-    int num_of_solutions = 0;
+    int num_of_solutions = invalid_number;
 
     if (fabs(coefficients.b) >= EPS)
     {
@@ -153,14 +140,12 @@ int solve_linear(struct Coefficients coefficients, double* solutions)
     }
 
     return num_of_solutions;
-
 }
 
 
 int solve_quadratic(struct Coefficients coefficients, double* solutions)
 {
-
-    int num_of_solutions = 0;
+    int num_of_solutions = invalid_number;
 
     double d = coefficients.b * coefficients.b - 4 * coefficients.a * coefficients.c;
 
@@ -217,7 +202,6 @@ bool check_answers(double* solutions, double* right_answers, int num_of_solution
 {
     bool is_checked = false;
 
-
     int matches = 0;
 
     for (int i = 0; i < num_of_solutions; i++)
@@ -228,21 +212,19 @@ bool check_answers(double* solutions, double* right_answers, int num_of_solution
             {
                 matches++;
             }
-
         }
-
     }
-
     is_checked = (matches >= num_of_solutions);
 
     return is_checked;
 }
 
+
 bool check_num_of_solutions(int num_of_solutions, int right_num_of_solutions)
 {
     return (num_of_solutions == right_num_of_solutions);
-
 }
+
 
 bool check_solver(double *solutions, double *right_answers, int num_of_solutions, int right_num_of_solutions)
 {
@@ -254,6 +236,7 @@ bool check_solver(double *solutions, double *right_answers, int num_of_solutions
     return check_answers(solutions, right_answers, num_of_solutions);
 
 }
+
 
 void print_test(bool is_passed, int test_number, int num_of_solutions, double* solutions, int right_num_of_solutions, double* right_answers, struct Coefficients coefficients)
 {
@@ -324,7 +307,6 @@ void test()
 
     double right_answers[2] = {NAN, NAN}; //x1, x2
 
-
     int test_number = 0;
 
     bool is_passed = false;
@@ -339,7 +321,6 @@ void test()
     {
         fgets(coef_string, MAXSTR, inputfile);
 
-
         coefficients.a = NAN;
         coefficients.b = NAN;
         coefficients.c = NAN;
@@ -348,7 +329,6 @@ void test()
 
         right_answers[0] = NAN;
         right_answers[1] = NAN;
-
 
         sscanf(coef_string, "%lf %lf %lf %d" , &coefficients.a, &coefficients.b, &coefficients.c, &right_num_of_solutions);
 
@@ -362,13 +342,10 @@ void test()
         if (right_num_of_solutions == 2)
         {
             sscanf(coef_string, "%lf %lf", &right_answers[0], &right_answers[1]);
-
-
         }
         else if (right_num_of_solutions == 1)
         {
             sscanf(coef_string, "%lf", &right_answers[0], &right_answers[1]);
-
         }
 
         test_number++;
