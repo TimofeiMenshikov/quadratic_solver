@@ -1,19 +1,6 @@
-#include <stdio.h>
-#include <math.h>
-#include <TXLib.h>
-
 #include "quad_solver.h"
 
-const double EPS = 0.0000001;
-
-enum number_of_solutions{invalid_number = -2, inf_solutions = -1, zero_solutions = 0, one_solution = 1, two_solutions = 2};
-
-struct Coefficients
-{
-    double a;
-    double b;
-    double c;
-};
+#define TEST
 
 
 int main()
@@ -24,8 +11,8 @@ int main()
         struct Coefficients coefficients = {NAN, NAN, NAN}; // a, b, c
         double solutions[2] = {NAN, NAN}; // x1, x2
         int num_of_solutions = NAN;
-        coefficients = coef_input(coefficients);
-        num_of_solutions = solve_equation(coefficients, solutions);
+        coef_input(&coefficients);
+        num_of_solutions = solve_equation(&coefficients, solutions);
         print_solutions(solutions, num_of_solutions);
     #endif
 
@@ -33,21 +20,40 @@ int main()
 }
 
 
-struct Coefficients coef_input_from_file(struct Coefficients coefficients, FILE* inputfile)
+bool is_equal(double first_number, double second_number)
 {
-    fscanf(inputfile, "%lf %lf %lf", &coefficients.a, &coefficients.b, &coefficients.c);
-
-    return coefficients;
+    return (fabs(first_number - second_number) < EPS);
 }
 
 
-struct Coefficients coef_input(struct Coefficients coefficients)
+int comparison_of_two_numbers(double first_number, double second_number)
+{
+    if ((first_number - second_number) > EPS)
+    {
+        return  FIRST_IS_BIGGER;
+    }
+    if ((second_number - first_number) > EPS)
+    {
+        return FIRST_IS_LESS;
+    }
+
+    return EQUAL;
+}
+
+
+void coef_input_from_file(struct Coefficients* coef_pointer, FILE* inputfile)
+{
+    fscanf(inputfile, "%lf %lf %lf", &(coef_pointer->a) , &(coef_pointer->b), &(coef_pointer->c));
+}
+
+
+void coef_input(struct Coefficients* coef_pointer)
 {
     printf("введите 3 числа - коэффициенты a, b, c в уравнении ax^2 + bx + c = 0\n");
 
     int is_scan_coefficient = 0;
 
-    while ((is_scan_coefficient = scanf("%lf", &coefficients.a)) == 0)
+    while ((is_scan_coefficient = scanf("%lf", &(coef_pointer->a))) == 0)
     {
         if (is_scan_coefficient == 0)
         {
@@ -59,7 +65,7 @@ struct Coefficients coef_input(struct Coefficients coefficients)
 
     is_scan_coefficient = 0;
 
-    while ((is_scan_coefficient = scanf("%lf", &coefficients.b)) == 0)
+    while ((is_scan_coefficient = scanf("%lf", &(coef_pointer->b))) == 0)
     {
         if (is_scan_coefficient == 0)
         {
@@ -71,7 +77,7 @@ struct Coefficients coef_input(struct Coefficients coefficients)
 
     is_scan_coefficient = 0;
 
-    while ((is_scan_coefficient = scanf("%lf", &coefficients.c)) == 0)
+    while ((is_scan_coefficient = scanf("%lf", &(coef_pointer->c))) == 0)
     {
         if (is_scan_coefficient == 0)
         {
@@ -79,51 +85,47 @@ struct Coefficients coef_input(struct Coefficients coefficients)
         }
     }
     printf("коэффициент c введён\n");
-
-    return coefficients;
 }
 
 
-int solve_equation(struct Coefficients coefficients, double* solutions)
+int solve_equation(struct Coefficients* coef_pointer, double* solutions)
 {
 
-    int num_of_solutions = invalid_number;
+    int num_of_solutions = INVALID_NUMBER;
 
-    if (fabs(coefficients.a) < EPS)
+    if (is_equal(coef_pointer->a, 0))
     {
-        num_of_solutions = solve_linear(coefficients, solutions);
+        num_of_solutions = solve_linear(coef_pointer, solutions);
 
     }
     else
     {
-        num_of_solutions = solve_quadratic(coefficients, solutions);
+        num_of_solutions = solve_quadratic(coef_pointer, solutions);
     }
 
     return num_of_solutions;
-
-
 }
 
 
-int solve_linear(struct Coefficients coefficients, double* solutions)
+int solve_linear(struct Coefficients* coef_pointer, double* solutions)
 {
-    int num_of_solutions = invalid_number;
+    int num_of_solutions = INVALID_NUMBER;
 
-    if (fabs(coefficients.b) >= EPS)
+    if (!is_equal(coef_pointer->b, 0))
     {
-        num_of_solutions = one_solution;
-        double x = -coefficients.c / coefficients.b;
+        num_of_solutions = ONE_SOLUTION;
+        double x = -coef_pointer->c / coef_pointer->b;
         solutions[0] = x;
     }
     else
     {
-        if (fabs(coefficients.c) >= EPS)
+        if (!is_equal(coef_pointer->c, 0))
         {
-            num_of_solutions = zero_solutions;
+            num_of_solutions = ZERO_SOLUTIONS;
         }
         else
         {
-            num_of_solutions = inf_solutions;
+            num_of_solutions = INF_SOLUTIONS;
         }
     }
 
@@ -131,33 +133,33 @@ int solve_linear(struct Coefficients coefficients, double* solutions)
 }
 
 
-int solve_quadratic(struct Coefficients coefficients, double* solutions)
+int solve_quadratic(struct Coefficients* coef_pointer, double* solutions)
 {
-    int num_of_solutions = invalid_number;
+    int num_of_solutions = INVALID_NUMBER;
 
-    double d = coefficients.b * coefficients.b - 4 * coefficients.a * coefficients.c;
+    double d = (coef_pointer->b) * (coef_pointer->b) - 4 * (coef_pointer->a) * (coef_pointer->c);
 
-    if (d > EPS)
+    if (comparison_of_two_numbers(d, 0) == FIRST_IS_BIGGER)
     {
-        num_of_solutions = two_solutions;
+        num_of_solutions = TWO_SOLUTIONS;
 
         double root_of_d = sqrt(d);
 
-        double x1 = (-coefficients.b + root_of_d) / (2 * coefficients.a);
-        double x2 = (-coefficients.b - root_of_d) / (2 * coefficients.a);
+        double x1 = (-coef_pointer->b + root_of_d) / (2 * coef_pointer->a);
+        double x2 = (-coef_pointer->b - root_of_d) / (2 * coef_pointer->a);
 
         solutions[0] = x1;
         solutions[1] = x2;
     }
-    else if (d < -EPS)
+    else if (comparison_of_two_numbers(d, 0) == FIRST_IS_LESS)
     {
-        num_of_solutions = zero_solutions;
+        num_of_solutions = ZERO_SOLUTIONS;
     }
     else
     {
-        num_of_solutions = one_solution;
+        num_of_solutions = ONE_SOLUTION;
 
-        double x = -coefficients.b / (2  * coefficients.a);
+        double x = -coef_pointer->b / (2  * coef_pointer->a);
 
         solutions[0] = x;
     }
@@ -168,7 +170,7 @@ int solve_quadratic(struct Coefficients coefficients, double* solutions)
 
 void print_solutions(double* solutions, int num_of_solutions)
 {
-    if (num_of_solutions != inf_solutions)
+    if (num_of_solutions != INF_SOLUTIONS)
     {
         printf("%d solution(s) in real numbers\n", num_of_solutions);
     }
@@ -196,7 +198,7 @@ bool check_answers(double* solutions, double* right_answers, int num_of_solution
     {
         for (int j = 0; j < num_of_solutions; j++)
         {
-            if ((fabs(solutions[i] - right_answers[j])) < EPS)
+            if (comparison_of_two_numbers(solutions[i], right_answers[j]) == EQUAL)
             {
                 matches++;
             }
@@ -208,42 +210,42 @@ bool check_answers(double* solutions, double* right_answers, int num_of_solution
 }
 
 
-bool check_num_of_solutions(int num_of_solutions, int right_num_of_solutions)
-{
-    return (num_of_solutions == right_num_of_solutions);
-}
-
-
 bool check_solver(double *solutions, double *right_answers, int num_of_solutions, int right_num_of_solutions)
 {
-    if (not check_num_of_solutions(num_of_solutions, right_num_of_solutions))
+    if (num_of_solutions != right_num_of_solutions)
     {
+        printf("\nне совпало\n");
         return false;
     }
-
+    printf("\nкол-во совпало\n");
     return check_answers(solutions, right_answers, num_of_solutions);
-
 }
 
 
-void print_test(bool is_passed, int test_number, int num_of_solutions, double* solutions, int right_num_of_solutions, double* right_answers, struct Coefficients coefficients)
+void print_test(bool is_passed, int test_number, int num_of_solutions, double* solutions, int right_num_of_solutions, double* right_answers, struct Coefficients* coef_pointer)
 {
     printf("test %d: ", test_number);
 
     if (is_passed)
     {
         printf("OK\n");
-        printf("equation: %f * x^2 + %f * x + %f = 0\n", coefficients.a, coefficients.b, coefficients.c);
+        printf("equation: %f * x^2 + %f * x + %f = 0\n", coef_pointer->a, coef_pointer->b, coef_pointer->c);
     }
     else
     {
         printf("failed\n");
+        printf("equation: %f * x^2 + %f * x + %f = 0\n", coef_pointer->a, coef_pointer->b, coef_pointer->c);
 
-        printf("equation: %f * x^2 + %f * x + %f = 0\n", coefficients.a, coefficients.b, coefficients.c);
+        print_test_info(num_of_solutions, solutions, right_num_of_solutions, right_answers);
+    }
+}
 
+
+void print_test_info(int num_of_solutions, double* solutions, int right_num_of_solutions, double* right_answers)
+{
         printf("right answers:\n");
 
-        if (num_of_solutions != inf_solutions)
+        if (num_of_solutions != INF_SOLUTIONS)
         {
             printf("%d solution(s) in real numbers\n", num_of_solutions);
         }
@@ -261,7 +263,7 @@ void print_test(bool is_passed, int test_number, int num_of_solutions, double* s
 
         printf("computer answers:\n");
 
-        if (num_of_solutions != inf_solutions)
+        if (num_of_solutions != INF_SOLUTIONS)
         {
             printf("%d solution(s) in real numbers\n", num_of_solutions);
         }
@@ -276,15 +278,14 @@ void print_test(bool is_passed, int test_number, int num_of_solutions, double* s
         }
 
         printf("\n");
-    }
 }
 
 
 void nulling_coefficients(struct Coefficients* coef_pointer)
 {
-    coef_pointer -> a = NAN;
-    coef_pointer -> b = NAN;
-    coef_pointer -> c = NAN;
+    coef_pointer->a = NAN;
+    coef_pointer->b = NAN;
+    coef_pointer->c = NAN;
 }
 
 
@@ -300,22 +301,17 @@ void test()
     FILE* inputfile;
     inputfile = fopen("input.txt", "r");
 
-    int right_num_of_solutions = invalid_number;
-    int num_of_solutions = invalid_number;
+    int right_num_of_solutions = INVALID_NUMBER;
+    int num_of_solutions = INVALID_NUMBER;
 
     struct Coefficients coefficients = {NAN, NAN, NAN}; // a, b, c
 
     double solutions[2] = {NAN, NAN}; // x1, x2
     double right_answers[2] = {NAN, NAN}; //x1, x2
 
-
-
-
     int test_number = 0;
 
     bool is_passed = false;
-
-    bool test_end = false;
 
     char coef_string[MAXSTR];
 
@@ -329,23 +325,23 @@ void test()
         nulling_answers(solutions);
         nulling_answers(right_answers);
 
-        num_of_solutions = invalid_number;
-        right_num_of_solutions = invalid_number;
+        num_of_solutions = INVALID_NUMBER;
+        right_num_of_solutions = INVALID_NUMBER;
 
         sscanf(coef_string, "%lf %lf %lf %d" , &coefficients.a, &coefficients.b, &coefficients.c, &right_num_of_solutions);
 
-        num_of_solutions = solve_equation(coefficients, solutions);
+        num_of_solutions = solve_equation(&coefficients, solutions);
 
         if (fgets(answers_string, MAXSTR, inputfile) == NULL)
         {
             break;
         }
 
-        if (right_num_of_solutions == two_solutions)
+        if (right_num_of_solutions == TWO_SOLUTIONS)
         {
             sscanf(answers_string, "%lf %lf", &right_answers[0], &right_answers[1]);
         }
-        else if (right_num_of_solutions == one_solution)
+        else if (right_num_of_solutions == ONE_SOLUTION)
         {
             sscanf(answers_string, "%lf", &right_answers[0], &right_answers[1]);
         }
@@ -354,6 +350,6 @@ void test()
 
         is_passed = (check_solver(solutions, right_answers, num_of_solutions, right_num_of_solutions));
 
-        print_test(is_passed, test_number, num_of_solutions, solutions, right_num_of_solutions, right_answers, coefficients);
+        print_test(is_passed, test_number, num_of_solutions, solutions, right_num_of_solutions, right_answers, &coefficients);
     }
 }
