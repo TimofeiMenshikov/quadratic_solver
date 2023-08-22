@@ -313,14 +313,8 @@ void test()
 
     bool is_passed = false;
 
-    char coef_string[MAXSTR];
-
-    char answers_string[MAXSTR];
-
     while (true)
     {
-        fgets(coef_string, MAXSTR, inputfile);
-
         nulling_coefficients(&coefficients);
         nulling_answers(solutions);
         nulling_answers(right_answers);
@@ -328,23 +322,27 @@ void test()
         num_of_solutions = INVALID_NUMBER;
         right_num_of_solutions = INVALID_NUMBER;
 
-        sscanf(coef_string, "%lf %lf %lf %d" , &coefficients.a, &coefficients.b, &coefficients.c, &right_num_of_solutions);
-
-        num_of_solutions = solve_equation(&coefficients, solutions);
-
-        if (fgets(answers_string, MAXSTR, inputfile) == NULL)
+        if (fscanf(inputfile, "%lf %lf %lf %d" , &coefficients.a, &coefficients.b, &coefficients.c, &right_num_of_solutions) == EOF)
         {
             break;
         }
 
         if (right_num_of_solutions == TWO_SOLUTIONS)
         {
-            sscanf(answers_string, "%lf %lf", &right_answers[0], &right_answers[1]);
+            if (fscanf(inputfile, "%lf %lf", &right_answers[0], &right_answers[1]) == EOF)
+            {
+                break;
+            }
         }
         else if (right_num_of_solutions == ONE_SOLUTION)
         {
-            sscanf(answers_string, "%lf", &right_answers[0], &right_answers[1]);
+            if (fscanf(inputfile, "%lf", &right_answers[0], &right_answers[1]) == EOF)
+            {
+                break;
+            }
         }
+
+        num_of_solutions = solve_equation(&coefficients, solutions);
 
         test_number++;
 
