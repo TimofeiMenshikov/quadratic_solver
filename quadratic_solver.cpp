@@ -188,7 +188,7 @@ void print_solutions(double* solutions, int num_of_solutions)
 }
 
 
-bool check_answers(double* solutions, double* right_answers, int num_of_solutions)
+bool check_answers(double* solutions, double* right_solutions, int num_of_solutions)
 {
     bool is_checked = false;
 
@@ -198,7 +198,7 @@ bool check_answers(double* solutions, double* right_answers, int num_of_solution
     {
         for (int j = 0; j < num_of_solutions; j++)
         {
-            if (comparison_of_two_numbers(solutions[i], right_answers[j]) == EQUAL)
+            if (comparison_of_two_numbers(solutions[i], right_solutions[j]) == EQUAL)
             {
                 matches++;
             }
@@ -210,7 +210,7 @@ bool check_answers(double* solutions, double* right_answers, int num_of_solution
 }
 
 
-bool check_solver(double *solutions, double *right_answers, int num_of_solutions, int right_num_of_solutions)
+bool check_solver(double *solutions, double* right_solutions, int num_of_solutions, int right_num_of_solutions)
 {
     if (num_of_solutions != right_num_of_solutions)
     {
@@ -218,7 +218,7 @@ bool check_solver(double *solutions, double *right_answers, int num_of_solutions
         return false;
     }
     printf("\nкол-во совпало\n");
-    return check_answers(solutions, right_answers, num_of_solutions);
+    return check_answers(solutions, right_solutions, num_of_solutions);
 }
 
 
@@ -307,7 +307,7 @@ void test()
     struct Coefficients coefficients = {NAN, NAN, NAN}; // a, b, c
 
     double solutions[2] = {NAN, NAN}; // x1, x2
-    double right_answers[2] = {NAN, NAN}; //x1, x2
+    double right_solutions[2] = {NAN, NAN}; //x1, x2
 
     int test_number = 0;
 
@@ -317,7 +317,7 @@ void test()
     {
         nulling_coefficients(&coefficients);
         nulling_answers(solutions);
-        nulling_answers(right_answers);
+        nulling_answers(right_solutions);
 
         num_of_solutions = INVALID_NUMBER;
         right_num_of_solutions = INVALID_NUMBER;
@@ -329,14 +329,14 @@ void test()
 
         if (right_num_of_solutions == TWO_SOLUTIONS)
         {
-            if (fscanf(inputfile, "%lf %lf", &right_answers[0], &right_answers[1]) == EOF)
+            if (fscanf(inputfile, "%lf %lf", &right_solutions[0], &right_solutions[1]) == EOF)
             {
                 break;
             }
         }
         else if (right_num_of_solutions == ONE_SOLUTION)
         {
-            if (fscanf(inputfile, "%lf", &right_answers[0], &right_answers[1]) == EOF)
+            if (fscanf(inputfile, "%lf", &right_solutions[0], &right_solutions[1]) == EOF)
             {
                 break;
             }
@@ -346,8 +346,8 @@ void test()
 
         test_number++;
 
-        is_passed = (check_solver(solutions, right_answers, num_of_solutions, right_num_of_solutions));
+        is_passed = (check_solver(solutions, right_solutions, num_of_solutions, right_num_of_solutions));
 
-        print_test(is_passed, test_number, num_of_solutions, solutions, right_num_of_solutions, right_answers, &coefficients);
+        print_test(is_passed, test_number, num_of_solutions, solutions, right_num_of_solutions, right_solutions, &coefficients);
     }
 }
