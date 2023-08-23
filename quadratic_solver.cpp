@@ -1,10 +1,9 @@
 #include "quad_solver.h"
 #include "quad_solver.cpp"
 
-
-
   // пишется через аргументы командной строки flag -D
 #define INPUT_DEBUG
+
 
 int main()
 {
@@ -17,7 +16,6 @@ int main()
     return 0;
 }
 
-//TODO asserts
 
 void release()
 {
@@ -28,6 +26,7 @@ void release()
     solutions.number = solve_equation(&coefficients, solutions.arr);
     print_solutions(&solutions);
 }
+
 
 void test()
 {
@@ -64,7 +63,6 @@ void test()
 }
 
 
-
 void clean_buffer()
 {
     while (getchar() != '\n');
@@ -90,6 +88,7 @@ int comparison_of_two_numbers(double first_number, double second_number)
 
     return EQUAL;
 }
+
 
 bool is_not_inputed(double* one_coef_pointer)
 {
@@ -308,6 +307,7 @@ void nulling_answers(struct Solutions* solutions_pointer)
     solutions_pointer->number = INVALID_NUMBER;
 }
 
+
 void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_solutions_pointer, FILE* inputfile)
 {
     fscanf(inputfile, "%lf %lf %lf %d" , &(coef_pointer->a), &(coef_pointer->b), &(coef_pointer->c), &(right_solutions_pointer->number));
@@ -323,9 +323,7 @@ void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_
         fscanf(inputfile, "%lf %lf", &((right_solutions_pointer->arr)[0]), &((right_solutions_pointer->arr)[1]));
 
 #ifdef INPUT_DEBUG
-
         printf("Scanned two right solutions: %lf, %lf\n", right_solutions_pointer->arr[0], right_solutions_pointer->arr[1]);
-
 #endif
 
     }
@@ -334,13 +332,11 @@ void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_
         fscanf(inputfile, "%lf", &((right_solutions_pointer->arr)[0]));
 
 #ifdef INPUT_DEBUG
-
         printf("Scanned one right solution: %lf\n", right_solutions_pointer->arr[0]);
     }
     else
     {
         printf("Scanned zero right solutions\n");
-
 #endif
 
     }
