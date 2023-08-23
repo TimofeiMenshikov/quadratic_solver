@@ -1,10 +1,15 @@
+/*!
+\file
+main program with int main() function inside
+*/
+
+
 #include "quad_solver.h"
 
   // пишется через аргументы командной строки flag -D
 #define INPUT_DEBUG
 
 #define TEST
-
 
 
 int main()
@@ -21,11 +26,19 @@ int main()
 
 void release()
 {
-    struct Coefficients coefficients;  // a, b, c
+    struct Coefficients coefficients;
     struct Solutions solutions;
     //TODO tell me about NaN types
     coef_input(&coefficients);
+
+    assert(!isnan(coefficients.a));
+    assert(!isnan(coefficients.b));
+    assert(!isnan(coefficients.c));
+
     solutions.number = solve_equation(&coefficients, solutions.arr);
+
+    assert(solutions.number != INVALID_NUMBER);
+
     print_solutions(&solutions);
 }
 
@@ -42,7 +55,7 @@ bool is_equal(double first_number, double second_number)
 }
 
 
-int comparison_of_two_numbers(double first_number, double second_number)
+int comparison_of_two_numbers(double first_number, double second_number)///comparison of two double numbers with using epsilon
 {
     if ((first_number - second_number) > EPS)
     {
@@ -79,7 +92,7 @@ void one_coef_input(double* one_coef_pointer)
 }
 
 
-void coef_input(struct Coefficients* coef_pointer)
+void coef_input(struct Coefficients* coef_pointer)  /// introduces coefficients. if coefficient is entered incorrectly, calls clean_buffer
 {
     printf("введите 3 числа - коэффициенты a, b, c в уравнении ax^2 + bx + c = 0\n");
 
@@ -176,7 +189,7 @@ int solve_quadratic(struct Coefficients* coef_pointer, double solutions_array[])
 }
 
 
-void print_solutions(struct Solutions* solutions_pointer)
+void print_solutions(struct Solutions* solutions_pointer)   //displays solutions and their numbers
 {
     if (solutions_pointer->number != INF_SOLUTIONS)
     {
@@ -196,7 +209,7 @@ void print_solutions(struct Solutions* solutions_pointer)
 }
 
 
-bool check_answers(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer)
+bool check_answers(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer)   /// compares an array of solutions with a benchmark read from a file.
 {
     bool is_checked = false;
 
@@ -218,7 +231,7 @@ bool check_answers(struct Solutions* solutions_pointer, struct Solutions* right_
 }
 
 
-bool check_solver(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer)
+bool check_solver(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer)    /// checks solutions and their number with standards read from a file
 {
     if (solutions_pointer->number != right_solutions_pointer->number)
     {
@@ -244,4 +257,3 @@ void nulling_answers(struct Solutions* solutions_pointer)
     (solutions_pointer->arr)[0] = NAN;
     solutions_pointer->number = INVALID_NUMBER;
 }
-
