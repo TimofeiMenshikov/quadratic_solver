@@ -1,5 +1,5 @@
 #ifndef QUAD_SOLVER_H
-#define MY_FUNCTIONS_H
+#define QUAD_SOLVER_H
 
 /*!
 \file
