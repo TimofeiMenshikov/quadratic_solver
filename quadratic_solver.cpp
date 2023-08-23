@@ -1,6 +1,8 @@
 #include "quad_solver.h"
 #include "quad_solver.cpp"
 
+
+
   // пишется через аргументы командной строки flag -D
 #define INPUT_DEBUG
 
@@ -9,18 +11,58 @@ int main()
     #ifdef TEST
         test();
     #else
-        struct Coefficients coefficients;  // a, b, c
-        struct Solutions solutions;
-        //TODO tell me about NaN types
-        coef_input(&coefficients);
-        solutions.number = solve_equation(&coefficients, solutions.arr);
-        print_solutions(&solutions);
+        release();
     #endif
 
     return 0;
 }
 
 //TODO asserts
+
+void release()
+{
+    struct Coefficients coefficients;  // a, b, c
+    struct Solutions solutions;
+    //TODO tell me about NaN types
+    coef_input(&coefficients);
+    solutions.number = solve_equation(&coefficients, solutions.arr);
+    print_solutions(&solutions);
+}
+
+void test()
+{
+    FILE* inputfile = fopen("input.txt", "r");
+
+    struct Coefficients coefficients; // a, b, c
+    struct Solutions solutions;
+    struct Solutions right_solutions;
+
+    bool is_passed = false;
+
+    int number_of_tests = 0;
+
+    fscanf(inputfile, "%d", &number_of_tests);
+
+    assert(isnan(number_of_tests));
+
+    for (int test_number = first_test; test_number <= number_of_tests; test_number++)
+    {
+        nulling_coefficients(&coefficients);
+        nulling_answers(&solutions);
+        nulling_answers(&right_solutions);
+
+        input_from_file(&coefficients, &right_solutions, inputfile);
+
+        solutions.number = solve_equation(&coefficients, solutions.arr);
+
+        is_passed = (check_solver(&solutions, &right_solutions));
+
+        print_test(is_passed, test_number, &solutions, &right_solutions, &coefficients);
+    }
+
+    fclose(inputfile);
+}
+
 
 
 void clean_buffer()
@@ -77,6 +119,7 @@ void coef_input(struct Coefficients* coef_pointer)
 
     one_coef_input(&(coef_pointer->a));
     printf("a = %f\n", coef_pointer->a);
+
 
     one_coef_input(&(coef_pointer->b));
     printf("b = %f\n", coef_pointer->b);
@@ -269,6 +312,11 @@ void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_
 {
     fscanf(inputfile, "%lf %lf %lf %d" , &(coef_pointer->a), &(coef_pointer->b), &(coef_pointer->c), &(right_solutions_pointer->number));
 
+    assert(isnan(coef_pointer->a));
+    assert(isnan(coef_pointer->b));
+    assert(isnan(coef_pointer->c));
+    assert(isnan(right_solutions_pointer->number));
+
     printf("Scanned coeffs and amount: %lf, %lf, %lf, %lf\n", coef_pointer->a, coef_pointer->b, coef_pointer->c, right_solutions_pointer->number);
     if (right_solutions_pointer->number == TWO_SOLUTIONS)
     {
@@ -296,37 +344,4 @@ void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_
 #endif
 
     }
-}
-
-
-void test()
-{
-    FILE* inputfile = fopen("input.txt", "r");
-
-    struct Coefficients coefficients; // a, b, c
-    struct Solutions solutions;
-    struct Solutions right_solutions;
-
-    bool is_passed = false;
-
-    int number_of_tests = 0;
-
-    fscanf(inputfile, "%d", &number_of_tests);
-
-    for (int test_number = first_test; test_number <= number_of_tests; test_number++)
-    {
-        nulling_coefficients(&coefficients);
-        nulling_answers(&solutions);
-        nulling_answers(&right_solutions);
-
-        input_from_file(&coefficients, &right_solutions, inputfile);
-
-        solutions.number = solve_equation(&coefficients, solutions.arr);
-
-        is_passed = (check_solver(&solutions, &right_solutions));
-
-        print_test(is_passed, test_number, &solutions, &right_solutions, &coefficients);
-    }
-
-    fclose(inputfile);
 }
