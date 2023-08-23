@@ -1,18 +1,20 @@
-#include <TXLib.h>
+/*!
+\file
+header file with constants, function declarations, standard includes
+*/
+
+
+//#include <TXLib.h>
 #include <stdio.h>
 #include <math.h>
+#include <assert.h>
 
-
-#define MAXSTR 1000
-
+/// constant for comparison of two numbers
 const double EPS = 0.0000001;
 
-struct Coefficients
-{
-    double a;
-    double b;
-    double c;
-};
+
+const int first_test = 1;
+
 
 enum number_of_solutions
 {
@@ -23,29 +25,54 @@ enum number_of_solutions
     TWO_SOLUTIONS  = 2
 };
 
-enum number_comparison
+enum number_comparison    /// constants for comparison_of_two_numbers function
 {
     FIRST_IS_LESS = -1,
     EQUAL = 0,
     FIRST_IS_BIGGER = 1
 };
 
+struct Coefficients  ///  coefficients of equation ax^2 + bx + c = 0
+{
+    double a = NAN;
+    double b = NAN;
+    double c = NAN;
+};
+
+
+struct Solutions /// the structure includes an array of 2 elements - the maximum countable number of solutions to the quadratic equation and the number of solutions, which is equal to one of the number_of_solutions constants
+{
+    double arr[2] = {NAN, NAN};
+
+    int number = INVALID_NUMBER;
+};
+
+
+void clean_buffer();
+
 void test();
 
-bool is_equial(double first_number, double second_number);
+void release();
+
+void nulling_answers(struct Solutions* solutions_pointer);
+void nulling_coefficients(struct Coefficients* coef_pointer);
+
+bool is_equal(double first_number, double second_number);
 int comparison_of_two_numbers(double first_number_pointer, double second_number_pointer);
 
-void coef_input_from_file(struct Coefficients* coef_pointer, FILE* inputfile);
+bool is_not_inputed(double* one_coef_pointer);
+void one_coef_input(double* one_coef_pointer);
 void coef_input(struct Coefficients* coef_pointer);
 
-void print_solutions(double* solutions, int num_of_solutions);
+void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_solutions_pointer, FILE* inputfile);
 
-int solve_quadratic(struct Coefficients* coef_pointer, double* solutions);
+int solve_quadratic(struct Coefficients* coef_pointer, double* solutions_array);
 int solve_linear(struct Coefficients* coef_pointer, double* solutions);
 int solve_equation(struct Coefficients* coef_pointer, double* solutions);
 
-void print_test_info(int num_of_solutions, double* solutions, int right_num_of_solutions, double* right_answers);
-void print_test(bool is_passed, int test_number, int num_of_solutions, double* solutions, int right_num_of_solutions, double* right_answers, struct Coefficients* coef_pointer);
+void print_solutions(struct Solutions* solutions_pointer);
+void print_test_info(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer);
+void print_test(bool is_passed, int test_number, struct Solutions* solutions_pointer,  struct Solutions* right_solutions_pointer, struct Coefficients* coef_pointer);
 
-bool check_answers(int num_of_solutions, int right_num_of_solutions, double* solutions, double* right_answers);
-bool check_solver(double *solutions, double *right_answers, int num_of_solutions, int right_num_of_solutions);
+bool check_answers(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer);
+bool check_solver(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer);
