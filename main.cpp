@@ -89,7 +89,7 @@ void one_coef_input(double* one_coef_pointer)
 
 void coef_input(struct Coefficients* coef_pointer)  /// introduces coefficients. if coefficient is entered incorrectly, calls clean_buffer
 {
-    printf("введите 3 числа - коэффициенты a, b, c в уравнении ax^2 + bx + c = 0\n");
+    printf("enter 3 numbers - coefficients a, b, c in equation: ax^2 + bx + c = 0\n");
 
     one_coef_input(&(coef_pointer->a));
     printf("a = %f\n", coef_pointer->a);
@@ -201,40 +201,6 @@ void print_solutions(struct Solutions* solutions_pointer)   //displays solutions
     }
 
     printf("\n");
-}
-
-
-bool check_answers(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer)   /// compares an array of solutions with a benchmark read from a file.
-{
-    bool is_checked = false;
-
-    int matches = 0;
-
-    for (int solution_number = 0; solution_number < solutions_pointer->number; solution_number++)
-    {
-        for (int right_solution_number = 0; right_solution_number < right_solutions_pointer->number; right_solution_number++)
-        {
-            if (is_equal((solutions_pointer->arr)[solution_number], (right_solutions_pointer->arr)[right_solution_number]))
-            {
-                matches++;
-            }
-        }
-    }
-    is_checked = (matches >= solutions_pointer->number);
-
-    return is_checked;
-}
-
-
-bool check_solver(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer)    /// checks solutions and their number with standards read from a file
-{
-    if (solutions_pointer->number != right_solutions_pointer->number)
-    {
-        printf("\nне совпало\n");
-        return false;
-    }
-    printf("\nкол-во совпало\n");
-    return check_answers(solutions_pointer, right_solutions_pointer);
 }
 
 
