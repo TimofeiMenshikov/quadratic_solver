@@ -6,11 +6,6 @@ main program with int main() function inside
 
 #include "quad_solver.h"
 
-  // пишется через аргументы командной строки flag -D
-#define INPUT_DEBUG
-
-#define TEST
-
 
 int main()
 {
