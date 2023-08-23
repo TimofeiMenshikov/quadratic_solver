@@ -1,6 +1,13 @@
+/*!
+\file
+
+the program contains functions called in main.cpp to test the quadratic equation solver
+*/
+
+
 #include "quad_solver.h"
 
-void test()
+void test()  ///test run
 {
     FILE* inputfile = fopen("input.txt", "r");
 
@@ -37,7 +44,7 @@ void test()
 }
 
 
-void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_solutions_pointer, FILE* inputfile)
+void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_solutions_pointer, FILE* inputfile)  ///reads from the file the coefficients a, b, c of the equation ax^2 + bx + c = 0; number of decisions; solution of this equation
 {
     fscanf(inputfile, "%lf %lf %lf %d" , &(coef_pointer->a), &(coef_pointer->b), &(coef_pointer->c), &(right_solutions_pointer->number));
 
@@ -45,11 +52,13 @@ void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_
     assert(!isnan(coef_pointer->b));
     assert(!isnan(coef_pointer->c));
     assert(!isnan(right_solutions_pointer->number));
-
+#ifdef INPUT_DEBUG
     printf("Scanned coeffs and amount: %lf, %lf, %lf, %d\n", coef_pointer->a, coef_pointer->b, coef_pointer->c, right_solutions_pointer->number);
+#endif
     if (right_solutions_pointer->number == TWO_SOLUTIONS)
     {
         fscanf(inputfile, "%lf %lf", &((right_solutions_pointer->arr)[0]), &((right_solutions_pointer->arr)[1]));
+
 
 #ifdef INPUT_DEBUG
         printf("Scanned two right solutions: %lf, %lf\n", right_solutions_pointer->arr[0], right_solutions_pointer->arr[1]);
@@ -72,7 +81,7 @@ void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_
 }
 
 
-void print_test(bool is_passed, int test_number, struct Solutions* solutions_pointer,  struct Solutions* right_solutions_pointer, struct Coefficients* coef_pointer)
+void print_test(bool is_passed, int test_number, struct Solutions* solutions_pointer,  struct Solutions* right_solutions_pointer, struct Coefficients* coef_pointer) /// if the test is passed, notifies about it. Сalls print_test_info for test details if it fails
 {
     printf("test %d: ", test_number);
 
@@ -91,7 +100,7 @@ void print_test(bool is_passed, int test_number, struct Solutions* solutions_poi
 }
 
 
-void print_test_info(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer)
+void print_test_info(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer)/// Detailed information about the test. Calls the print_solutions function from main.cpp
 {
     printf("right answers:\n");
     print_solutions(right_solutions_pointer);
