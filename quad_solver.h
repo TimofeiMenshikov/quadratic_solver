@@ -1,3 +1,6 @@
+#ifndef QUAD_SOLVER_H
+#define MY_FUNCTIONS_H
+
 /*!
 \file
 header file with constants, function declarations, standard includes
@@ -76,3 +79,5 @@ void print_test(bool is_passed, int test_number, struct Solutions* solutions_poi
 
 bool check_answers(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer);
 bool check_solver(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer);
+
+#endif /* QUAD_SOLVER_H */
