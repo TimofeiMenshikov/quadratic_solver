@@ -1,19 +1,20 @@
 #include "quad_solver.h"
+#include "quad_solver.cpp"
 
-#define TEST  // пишется через аргументы командной строки flag -D
-
+  // пишется через аргументы командной строки flag -D
+#define INPUT_DEBUG
 
 int main()
 {
     #ifdef TEST
         test();
     #else
-        struct Coefficients coefficients = {NAN, NAN, NAN}; // a, b, c
-        double solutions[2] = {NAN, NAN}; // x1, x2
-        int num_of_solutions = INVALID_NUMBER; //TODO tell me about NaN types
+        struct Coefficients coefficients;  // a, b, c
+        struct Solutions solutions;
+        //TODO tell me about NaN types
         coef_input(&coefficients);
-        num_of_solutions = solve_equation(&coefficients, solutions);
-        print_solutions(solutions, num_of_solutions);
+        solutions.number = solve_equation(&coefficients, solutions.arr);
+        print_solutions(&solutions);
     #endif
 
     return 0;
@@ -21,6 +22,10 @@ int main()
 
 //TODO asserts
 
+void clean_buffer()
+{
+    while (getchar() != '\n');
+}
 bool is_equal(double first_number, double second_number)
 {
     return (fabs(first_number - second_number) < EPS);
@@ -41,17 +46,25 @@ int comparison_of_two_numbers(double first_number, double second_number)
     return EQUAL;
 }
 
+bool is_not_inputed(double* one_coef_pointer)
+{
+    return scanf("%lf", one_coef_pointer) == 0;
+}
+
 
 void one_coef_input(double* one_coef_pointer)
 {
     int is_scan_coefficient = 0;
-
-    while ((is_scan_coefficient = scanf("%lf", one_coef_pointer)) == 0)
+    while (is_not_inputed(one_coef_input)) == 0)
     {
-        if (is_scan_coefficient == 0)
-        {
-            scanf("%*s"); // Scanf is overkill to clear the buffer, find another solution, make clear buffer function
-        }
+        clean_buffer();
+
+#ifdef INPUT_DEBUG
+
+        printf("bufer is cleaned\n");
+
+#endif
+
     }
 }
 
@@ -61,17 +74,19 @@ void coef_input(struct Coefficients* coef_pointer)
     printf("введите 3 числа - коэффициенты a, b, c в уравнении ax^2 + bx + c = 0\n");
 
     one_coef_input(&(coef_pointer->a));
-    printf("коэффициент a введён\n");
+    printf("a = %f\n", coef_pointer->a);
 
     one_coef_input(&(coef_pointer->b));
-    printf("коэффициет b введён\n");
+    printf("b = %f\n", coef_pointer->b);
 
     one_coef_input(&(coef_pointer->c));
-    printf("коэффициент c введён\n");
+    printf("c = %f\n", coef_pointer->c);
+
+    clean_buffer();
 }
 
 
-int solve_equation(struct Coefficients* coef_pointer, double* solutions_array)
+int solve_equation(struct Coefficients* coef_pointer, double solutions_array[])
 {
 
     int num_of_solutions = INVALID_NUMBER;
@@ -89,7 +104,7 @@ int solve_equation(struct Coefficients* coef_pointer, double* solutions_array)
 }
 
 
-int solve_linear(struct Coefficients* coef_pointer, double* solutions_array)
+int solve_linear(struct Coefficients* coef_pointer, double solutions_array[])
 {
     int num_of_solutions = INVALID_NUMBER;
 
@@ -115,7 +130,7 @@ int solve_linear(struct Coefficients* coef_pointer, double* solutions_array)
 }
 
 
-int solve_quadratic(struct Coefficients* coef_pointer, double* solutions_array)
+int solve_quadratic(struct Coefficients* coef_pointer, double solutions_array[])
 {
     int num_of_solutions = INVALID_NUMBER;
 
@@ -248,17 +263,47 @@ void nulling_answers(struct Solutions* solutions_pointer)
     solutions_pointer->number = INVALID_NUMBER;
 }
 
+void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_solutions_pointer, FILE* inputfile)
+{
+    fscanf(inputfile, "%lf %lf %lf %d" , &(coef_pointer->a), &(coef_pointer->b), &(coef_pointer->c), &(right_solutions_pointer->number));
+
+    printf("Scanned coeffs and amount: %lf, %lf, %lf, %lf\n", coef_pointer->a, coef_pointer->b, coef_pointer->c, right_solutions_pointer->number);
+    if (right_solutions_pointer->number == TWO_SOLUTIONS)
+    {
+        fscanf(inputfile, "%lf %lf", &((right_solutions_pointer->arr)[0]), &((right_solutions_pointer->arr)[1]));
+
+#ifdef INPUT_DEBUG
+
+        printf("Scanned two right solutions: %lf, %lf\n", right_solutions_pointer->arr[0], right_solutions_pointer->arr[1]);
+
+#endif
+
+    }
+    else if (right_solutions_pointer->number == ONE_SOLUTION)
+    {
+        fscanf(inputfile, "%lf", &((right_solutions_pointer->arr)[0]));
+
+#ifdef INPUT_DEBUG
+
+        printf("Scanned one right solution: %lf\n", right_solutions_pointer->arr[0]);
+    }
+    else
+    {
+        printf("Scanned zero right solutions\n");
+
+#endif
+
+    }
+}
+
 
 void test()
 {
     FILE* inputfile = fopen("input.txt", "r");
 
     struct Coefficients coefficients; // a, b, c
-
     struct Solutions solutions;
     struct Solutions right_solutions;
-
-    int test_number = 0;
 
     bool is_passed = false;
 
@@ -266,31 +311,13 @@ void test()
 
     fscanf(inputfile, "%d", &number_of_tests);
 
-    for (test_number = 1; test_number <= number_of_tests; test_number++)
+    for (int test_number = first_test; test_number <= number_of_tests; test_number++)
     {
         nulling_coefficients(&coefficients);
         nulling_answers(&solutions);
         nulling_answers(&right_solutions);
 
-        fscanf(inputfile, "%lf %lf %lf %d" , &coefficients.a, &coefficients.b, &coefficients.c, &right_solutions.number);
-
-        printf("Scanned coeffs and amount: %lf, %lf, %lf, %lf\n", coefficients.a, coefficients.b, coefficients.c, right_solutions.number);
-        if (right_solutions.number == TWO_SOLUTIONS)
-        {
-            fscanf(inputfile, "%lf %lf", &((right_solutions.arr)[0]), &((right_solutions.arr)[1]));
-
-            printf("Scanned two right solutions: %lf, %lf\n", right_solutions.arr[0], right_solutions.arr[1]);
-        }
-        else if (right_solutions.number == ONE_SOLUTION)
-        {
-            fscanf(inputfile, "%lf", &((right_solutions.arr)[0]));
-
-            printf("Scanned one right solution: %lf\n", right_solutions.arr[0]);
-        }
-        else
-        {
-            printf("Scanned zero right solutions\n");
-        }
+        input_from_file(&coefficients, &right_solutions, inputfile);
 
         solutions.number = solve_equation(&coefficients, solutions.arr);
 
@@ -301,5 +328,4 @@ void test()
 
     fclose(inputfile);
 }
-
 
