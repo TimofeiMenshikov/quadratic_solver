@@ -81,6 +81,43 @@ void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_
 }
 
 
+bool check_solver(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer)    /// checks solutions and their number with standards read from a file
+{
+    if (solutions_pointer->number != right_solutions_pointer->number)
+    {
+        printf("\nне совпало\n");
+        return false;
+    }
+
+#ifdef INPUT_DEBUG
+    printf("the number of solutions is correct\n");
+#endif
+    return check_answers(solutions_pointer, right_solutions_pointer);
+}
+
+
+bool check_answers(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer)   /// compares an array of solutions with a benchmark read from a file.
+{
+    bool is_checked = false;
+
+    int matches = 0;
+
+    for (int solution_number = 0; solution_number < solutions_pointer->number; solution_number++)
+    {
+        for (int right_solution_number = 0; right_solution_number < right_solutions_pointer->number; right_solution_number++)
+        {
+            if (is_equal((solutions_pointer->arr)[solution_number], (right_solutions_pointer->arr)[right_solution_number]))
+            {
+                matches++;
+            }
+        }
+    }
+    is_checked = (matches >= solutions_pointer->number);
+
+    return is_checked;
+}
+
+
 void print_test(bool is_passed, int test_number, struct Solutions* solutions_pointer,  struct Solutions* right_solutions_pointer, struct Coefficients* coef_pointer) /// if the test is passed, notifies about it. Сalls print_test_info for test details if it fails
 {
     printf("test %d: ", test_number);
@@ -97,6 +134,8 @@ void print_test(bool is_passed, int test_number, struct Solutions* solutions_poi
 
         print_test_info(solutions_pointer, right_solutions_pointer);
     }
+
+    printf("\n");
 }
 
 
