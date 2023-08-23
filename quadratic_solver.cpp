@@ -22,10 +22,13 @@ int main()
 
 //TODO asserts
 
+
 void clean_buffer()
 {
     while (getchar() != '\n');
 }
+
+
 bool is_equal(double first_number, double second_number)
 {
     return (fabs(first_number - second_number) < EPS);
@@ -54,14 +57,13 @@ bool is_not_inputed(double* one_coef_pointer)
 
 void one_coef_input(double* one_coef_pointer)
 {
-    int is_scan_coefficient = 0;
-    while (is_not_inputed(one_coef_input)) == 0)
+    while (is_not_inputed(one_coef_pointer))
     {
         clean_buffer();
 
 #ifdef INPUT_DEBUG
 
-        printf("bufer is cleaned\n");
+        printf("buffer is cleaned\n");
 
 #endif
 
@@ -328,4 +330,3 @@ void test()
 
     fclose(inputfile);
 }
-
