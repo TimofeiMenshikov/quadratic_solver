@@ -10,7 +10,13 @@ the program contains functions called in main.cpp to test the quadratic equation
 
 void test()  ///test run
 {
-    FILE* inputfile = fopen("input.txt", "r");
+    FILE* inputfile;
+    if ((inputfile = fopen("input.txt", "r")) == NULL)
+    {
+        colored_print("line 13 test.cpp\n", red);
+        colored_print("file is empty\n", red);
+        return;
+    }
 
     struct Coefficients coefficients; // a, b, c
     struct Solutions solutions;
@@ -22,9 +28,14 @@ void test()  ///test run
 
     fscanf(inputfile, "%d", &number_of_tests);
 
-    printf("%d\n", number_of_tests);
+    printf("number of tests: %d\n", number_of_tests);
 
-    assert(number_of_tests != 0);
+    if (number_of_tests == 0)
+    {
+        colored_print("line 27 test.cpp: \n", red);
+        colored_print("file is empty\n", red);
+        return;    
+    }
 
     for (int test_number = 1; test_number <= number_of_tests; test_number++)
     {
@@ -52,32 +63,46 @@ void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_
     assert(!isnan(coef_pointer->a));
     assert(!isnan(coef_pointer->b));
     assert(!isnan(coef_pointer->c));
-    assert(!isnan(right_solutions_pointer->number));
-#ifdef INPUT_DEBUG
-    printf("Scanned coeffs and amount: %lf, %lf, %lf, %d\n", coef_pointer->a, coef_pointer->b, coef_pointer->c, right_solutions_pointer->number);
-#endif /* INPUT_DEBUG */
+    if (isnan(coef_pointer->a) or isnan(coef_pointer->b) or isnan(coef_pointer->c))
+    {
+        colored_print("line 66 test.cpp:\n", red);
+        colored_print("coefficients is not scanned correctly from file\n", red);
+        return;
+    }
+    if (isnan(right_solutions_pointer->number))
+    {
+        colored_print("line 72 test.cpp:\n", red);
+        colored_print("right solutions number is not scanned correctly from file\n", red);
+        return;
+    }
+
+    #ifdef INPUT_DEBUG
+        printf("Scanned coeffs and amount: %lf, %lf, %lf, %d\n", coef_pointer->a, coef_pointer->b, coef_pointer->c, right_solutions_pointer->number);
+    #endif /* INPUT_DEBUG */
+    
     if (right_solutions_pointer->number == TWO_SOLUTIONS)
     {
         fscanf(inputfile, "%lf %lf", &((right_solutions_pointer->arr)[0]), &((right_solutions_pointer->arr)[1]));
 
 
-#ifdef INPUT_DEBUG
-        printf("Scanned two right solutions: %lf, %lf\n", right_solutions_pointer->arr[0], right_solutions_pointer->arr[1]);
-#endif /* INPUT_DEBUG */
+        #ifdef INPUT_DEBUG
+            printf("Scanned two right solutions: %lf, %lf\n", right_solutions_pointer->arr[0], right_solutions_pointer->arr[1]);
+        #endif /* INPUT_DEBUG */
 
     }
     else if (right_solutions_pointer->number == ONE_SOLUTION)
     {
         fscanf(inputfile, "%lf", &((right_solutions_pointer->arr)[0]));
 
-#ifdef INPUT_DEBUG
-        printf("Scanned one right solution: %lf\n", right_solutions_pointer->arr[0]);
+        #ifdef INPUT_DEBUG
+            printf("Scanned one right solution: %lf\n", right_solutions_pointer->arr[0]);
+        #endif /* INPUT_DEBUG */
     }
     else
     {
-        printf("Scanned zero right solutions\n");
-#endif /* INPUT_DEBUG */
-
+        #ifdef INPUT_DEBUG
+            printf("Scanned zero right solutions\n");
+        #endif /* INPUT_DEBUG */
     }
 }
 
@@ -86,13 +111,14 @@ bool check_solver(struct Solutions* solutions_pointer, struct Solutions* right_s
 {
     if (solutions_pointer->number != right_solutions_pointer->number)
     {
-        printf("\nне совпало\n");
+        printf("\nthe number of solutions is wrong\n");
         return false;
     }
 
-#ifdef INPUT_DEBUG
-    printf("the number of solutions is correct\n");
-#endif /* INPUT_DEBUG */
+    #ifdef INPUT_DEBUG
+        printf("the number of solutions is correct\n");
+    #endif /* INPUT_DEBUG */
+    
     return check_answers(solutions_pointer, right_solutions_pointer);
 }
 
@@ -125,26 +151,15 @@ void print_test(bool is_passed, int test_number, struct Solutions* solutions_poi
 
     if (is_passed)
     {
-
-#ifdef COLOR_COMANDLINE
-        color_cmd(light_green);
-#endif /* COLOR_COMANDLINE */
-        printf("OK\n");
-#ifdef COLOR_COMANDLINE
-        remove_color_cmd();
-#endif
+        colored_print("OK\n", light_green);
 
         printf("equation: %f * x^2 + %f * x + %f = 0\n", coef_pointer->a, coef_pointer->b, coef_pointer->c);
     }
     else
     {
-#ifdef COLOR_COMANDLINE
-        color_cmd(red);
-#endif /* COLOR_COMANDLINE */
-        printf("failed\n");
-#ifdef COLOR_COMANDLINE
-        remove_color_cmd();
-#endif /* COLOR_COMANDLINE */
+        colored_print("failed\n", red);
+
+
         printf("equation: %f * x^2 + %f * x + %f = 0\n", coef_pointer->a, coef_pointer->b, coef_pointer->c);
 
         print_test_info(solutions_pointer, right_solutions_pointer);
