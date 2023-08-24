@@ -6,6 +6,7 @@ the program contains functions called in main.cpp to test the quadratic equation
 
 
 #include "quad_solver.h"
+#include "color_cmd.h"
 
 void test()  ///test run
 {
@@ -25,7 +26,7 @@ void test()  ///test run
 
     assert(number_of_tests != 0);
 
-    for (int test_number = first_test; test_number <= number_of_tests; test_number++)
+    for (int test_number = 1; test_number <= number_of_tests; test_number++)
     {
         nulling_coefficients(&coefficients);
         nulling_answers(&solutions);
@@ -54,7 +55,7 @@ void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_
     assert(!isnan(right_solutions_pointer->number));
 #ifdef INPUT_DEBUG
     printf("Scanned coeffs and amount: %lf, %lf, %lf, %d\n", coef_pointer->a, coef_pointer->b, coef_pointer->c, right_solutions_pointer->number);
-#endif
+#endif /* INPUT_DEBUG */
     if (right_solutions_pointer->number == TWO_SOLUTIONS)
     {
         fscanf(inputfile, "%lf %lf", &((right_solutions_pointer->arr)[0]), &((right_solutions_pointer->arr)[1]));
@@ -62,7 +63,7 @@ void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_
 
 #ifdef INPUT_DEBUG
         printf("Scanned two right solutions: %lf, %lf\n", right_solutions_pointer->arr[0], right_solutions_pointer->arr[1]);
-#endif
+#endif /* INPUT_DEBUG */
 
     }
     else if (right_solutions_pointer->number == ONE_SOLUTION)
@@ -75,7 +76,7 @@ void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_
     else
     {
         printf("Scanned zero right solutions\n");
-#endif
+#endif /* INPUT_DEBUG */
 
     }
 }
@@ -91,7 +92,7 @@ bool check_solver(struct Solutions* solutions_pointer, struct Solutions* right_s
 
 #ifdef INPUT_DEBUG
     printf("the number of solutions is correct\n");
-#endif
+#endif /* INPUT_DEBUG */
     return check_answers(solutions_pointer, right_solutions_pointer);
 }
 
@@ -124,12 +125,26 @@ void print_test(bool is_passed, int test_number, struct Solutions* solutions_poi
 
     if (is_passed)
     {
+
+#ifdef COLOR_COMANDLINE
+        color_cmd(light_green);
+#endif /* COLOR_COMANDLINE */
         printf("OK\n");
+#ifdef COLOR_COMANDLINE
+        remove_color_cmd();
+#endif
+
         printf("equation: %f * x^2 + %f * x + %f = 0\n", coef_pointer->a, coef_pointer->b, coef_pointer->c);
     }
     else
     {
+#ifdef COLOR_COMANDLINE
+        color_cmd(red);
+#endif /* COLOR_COMANDLINE */
         printf("failed\n");
+#ifdef COLOR_COMANDLINE
+        remove_color_cmd();
+#endif /* COLOR_COMANDLINE */
         printf("equation: %f * x^2 + %f * x + %f = 0\n", coef_pointer->a, coef_pointer->b, coef_pointer->c);
 
         print_test_info(solutions_pointer, right_solutions_pointer);

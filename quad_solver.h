@@ -12,12 +12,9 @@ header file with constants, function declarations, standard includes
 #include <math.h>
 #include <assert.h>
 
+
 /// constant for comparison of two numbers
 const double EPS = 0.0000001;
-
-
-const int first_test = 1;
-
 
 enum number_of_solutions
 {

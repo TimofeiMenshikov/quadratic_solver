@@ -5,15 +5,16 @@ main program with int main() function inside
 
 
 #include "quad_solver.h"
+#include "color_cmd.h"
 
 
 int main()
 {
     #ifdef TEST
         test();
-    #else
+    #else /* TEST */
         release();
-    #endif
+    #endif /* TEST */
 
     return 0;
 }
@@ -21,6 +22,7 @@ int main()
 
 void release()
 {
+
     struct Coefficients coefficients;
     struct Solutions solutions;
     //TODO tell me about NaN types
@@ -81,7 +83,7 @@ void one_coef_input(double* one_coef_pointer)
 
         printf("buffer is cleaned\n");
 
-#endif
+#endif /* INPUT_DEBUG */
 
     }
 }
@@ -218,3 +220,17 @@ void nulling_answers(struct Solutions* solutions_pointer)
     (solutions_pointer->arr)[0] = NAN;
     solutions_pointer->number = INVALID_NUMBER;
 }
+
+#ifdef COLOR_COMANDLINE
+void color_cmd(short unsigned int text_color)
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), text_color);
+}
+
+
+void remove_color_cmd()
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),  0x0f); 
+}
+#endif /* COLOR_COMANDLINE */
+
