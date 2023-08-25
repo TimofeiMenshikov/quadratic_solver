@@ -9,14 +9,11 @@ the program contains functions called in main.cpp to test the quadratic equation
 #include "color_cmd.h"
 
 void test()  ///test run
-{
+{   
+    
     FILE* inputfile;
-    if ((inputfile = fopen("input.txt", "r")) == NULL)
-    {
-        colored_print("line 13 test.cpp\n", red);
-        colored_print("file is empty\n", red);
-        return;
-    }
+
+    my_assert(((inputfile = fopen("input.txt", "r")) != NULL), FILE_IS_NOT_OPENED, __LINE__, __FILE__);
 
     struct Coefficients coefficients; // a, b, c
     struct Solutions solutions;
@@ -30,12 +27,7 @@ void test()  ///test run
 
     printf("number of tests: %d\n", number_of_tests);
 
-    if (number_of_tests == 0)
-    {
-        colored_print("line 27 test.cpp: \n", red);
-        colored_print("file is empty\n", red);
-        return;    
-    }
+    my_assert((number_of_tests != 0), FILE_IS_EMPTY, __LINE__, __FILE__);
 
     for (int test_number = 1; test_number <= number_of_tests; test_number++)
     {
@@ -60,21 +52,7 @@ void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_
 {
     fscanf(inputfile, "%lf %lf %lf %d" , &(coef_pointer->a), &(coef_pointer->b), &(coef_pointer->c), &(right_solutions_pointer->number));
 
-    assert(!isnan(coef_pointer->a));
-    assert(!isnan(coef_pointer->b));
-    assert(!isnan(coef_pointer->c));
-    if (isnan(coef_pointer->a) or isnan(coef_pointer->b) or isnan(coef_pointer->c))
-    {
-        colored_print("line 66 test.cpp:\n", red);
-        colored_print("coefficients is not scanned correctly from file\n", red);
-        return;
-    }
-    if (isnan(right_solutions_pointer->number))
-    {
-        colored_print("line 72 test.cpp:\n", red);
-        colored_print("right solutions number is not scanned correctly from file\n", red);
-        return;
-    }
+    are_coefficients_nan(coef_pointer);
 
     #ifdef INPUT_DEBUG
         printf("Scanned coeffs and amount: %lf, %lf, %lf, %d\n", coef_pointer->a, coef_pointer->b, coef_pointer->c, right_solutions_pointer->number);
