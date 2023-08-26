@@ -8,12 +8,12 @@ the program contains functions called in main.cpp to test the quadratic equation
 #include "quad_solver.h"
 #include "color_cmd.h"
 
-void test()  ///test run
+int test()  ///test run
 {   
-    
+
     FILE* inputfile;
 
-    my_assert(((inputfile = fopen("input.txt", "r")) != NULL), FILE_IS_NOT_OPENED, __LINE__, __FILE__);
+    MY_ASSERT(((inputfile = fopen("input.txt", "r")) != NULL), FILE_IS_NOT_OPENED);
 
     struct Coefficients coefficients; // a, b, c
     struct Solutions solutions;
@@ -27,7 +27,7 @@ void test()  ///test run
 
     printf("number of tests: %d\n", number_of_tests);
 
-    my_assert((number_of_tests != 0), FILE_IS_EMPTY, __LINE__, __FILE__);
+    MY_ASSERT((number_of_tests != 0), FILE_IS_EMPTY);
 
     for (int test_number = 1; test_number <= number_of_tests; test_number++)
     {
@@ -45,14 +45,15 @@ void test()  ///test run
     }
 
     fclose(inputfile);
+    return NO_ERROR;
 }
 
 
-void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_solutions_pointer, FILE* inputfile)  ///reads from the file the coefficients a, b, c of the equation ax^2 + bx + c = 0; number of decisions; solution of this equation
+int input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_solutions_pointer, FILE* inputfile)  ///reads from the file the coefficients a, b, c of the equation ax^2 + bx + c = 0; number of decisions; solution of this equation
 {
     fscanf(inputfile, "%lf %lf %lf %d" , &(coef_pointer->a), &(coef_pointer->b), &(coef_pointer->c), &(right_solutions_pointer->number));
 
-    are_coefficients_nan(coef_pointer);
+    ARE_COEFFICIENTS_NAN(coef_pointer);
 
     #ifdef INPUT_DEBUG
         printf("Scanned coeffs and amount: %lf, %lf, %lf, %d\n", coef_pointer->a, coef_pointer->b, coef_pointer->c, right_solutions_pointer->number);
@@ -82,6 +83,8 @@ void input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_
             printf("Scanned zero right solutions\n");
         #endif /* INPUT_DEBUG */
     }
+
+    return 0;
 }
 
 
@@ -136,7 +139,6 @@ void print_test(bool is_passed, int test_number, struct Solutions* solutions_poi
     else
     {
         colored_print("failed\n", red);
-
 
         printf("equation: %f * x^2 + %f * x + %f = 0\n", coef_pointer->a, coef_pointer->b, coef_pointer->c);
 
