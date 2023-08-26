@@ -25,20 +25,22 @@ int main()
 }
 
 
-void release()
+int release()
 {
     struct Coefficients coefficients;
     struct Solutions solutions;
     //TODO tell me about NaN types
     coef_input(&coefficients);
 
-    are_coefficients_nan(&coefficients);
+    ARE_COEFFICIENTS_NAN(&coefficients);
 
     solutions.number = solve_equation(&coefficients, solutions.arr);
 
-    my_assert((solutions.number != INVALID_NUMBER), INVALID_NUMBER, __LINE__, __FILE__);
+    MY_ASSERT((solutions.number != INVALID_NUMBER), INVALID_NUMBER);
 
     print_solutions(&solutions);
+
+    return 0;
 }
 
 
@@ -133,7 +135,7 @@ int solve_linear(struct Coefficients* coef_pointer, double solutions_array[]) //
         num_of_solutions = ONE_SOLUTION;
         double x = -coef_pointer->c / coef_pointer->b;
 
-        my_assert(!isinf(x), DIVISION_BY_ZERO, __LINE__, __FILE__);
+        MY_ASSERT(!isinf(x), DIVISION_BY_ZERO);
 
         solutions_array[0] = x;
     }
@@ -168,8 +170,8 @@ int solve_quadratic(struct Coefficients* coef_pointer, double solutions_array[])
         double x1 = (-coef_pointer->b + root_of_d) / (2 * coef_pointer->a);
         double x2 = (-coef_pointer->b - root_of_d) / (2 * coef_pointer->a);
 
-        my_assert(!isinf(x1), DIVISION_BY_ZERO, __LINE__, __FILE__);
-        my_assert(!isinf(x2), DIVISION_BY_ZERO, __LINE__, __FILE__);
+        MY_ASSERT(!isinf(x1), DIVISION_BY_ZERO);
+        MY_ASSERT(!isinf(x2), DIVISION_BY_ZERO);
 
         solutions_array[0] = x1;
         solutions_array[1] = x2;
@@ -184,7 +186,7 @@ int solve_quadratic(struct Coefficients* coef_pointer, double solutions_array[])
 
         double x = -coef_pointer->b / (2  * coef_pointer->a);
 
-        my_assert(!isinf(x), DIVISION_BY_ZERO, __LINE__, __FILE__);
+        MY_ASSERT(!isinf(x), DIVISION_BY_ZERO);
 
         solutions_array[0] = x;
     }
@@ -257,10 +259,27 @@ void colored_print(const char* text, short unsigned int text_color  /* COLOR_COM
 }
 
 
-void are_coefficients_nan (const struct Coefficients* coef_pointer)
-{
-    my_assert(!isnan(coef_pointer->a), ISNAN, __LINE__, __FILE__);
-    my_assert(!isnan(coef_pointer->b), ISNAN, __LINE__, __FILE__);
-    my_assert(!isnan(coef_pointer->c), ISNAN, __LINE__, __FILE__);  
-}
-
+int print_error(int error_code) 
+{                   
+    switch(error_code) 
+    {                           
+        case INVALID_NUMBER:                       
+            printf("invalid int value\n");         
+            return INVALID_NUMBER;                 
+        case ISNAN:                                
+            printf("invalid double value\n");      
+            return ISNAN;                          
+        case FILE_IS_NOT_OPENED:                   
+            printf("file is not opened\n");        
+            return FILE_IS_NOT_OPENED;             
+        case FILE_IS_EMPTY:                        
+            printf("cannot read from file\n");     
+            return FILE_IS_EMPTY;                  
+        case DIVISION_BY_ZERO:                     
+            printf("division by zero\n");          
+            return INVALID_NUMBER;                 
+        default:                                   
+            return NO_ERROR;       
+    }
+}               
+     
