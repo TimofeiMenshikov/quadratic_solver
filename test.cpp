@@ -53,7 +53,7 @@ int input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_s
 {
     fscanf(inputfile, "%lf %lf %lf %d" , &(coef_pointer->a), &(coef_pointer->b), &(coef_pointer->c), &(right_solutions_pointer->number));
 
-    ARE_COEFFICIENTS_NAN(coef_pointer);
+    ARE_COEFFICIENTS_NAN(coef_pointer); 
 
     #ifdef INPUT_DEBUG
         printf("Scanned coeffs and amount: %lf, %lf, %lf, %d\n", coef_pointer->a, coef_pointer->b, coef_pointer->c, right_solutions_pointer->number);
@@ -88,7 +88,7 @@ int input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_s
 }
 
 
-bool check_solver(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer)    /// checks solutions and their number with standards read from a file
+bool check_solver(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer)    /// checks solutions and their number with standards read from a file
 {
     if (solutions_pointer->number != right_solutions_pointer->number)
     {
@@ -104,7 +104,7 @@ bool check_solver(struct Solutions* solutions_pointer, struct Solutions* right_s
 }
 
 
-bool check_answers(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer)   /// compares an array of solutions with a benchmark read from a file.
+bool check_answers(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer)   /// compares an array of solutions with a benchmark read from a file.
 {
     bool is_checked = false;
 
@@ -126,7 +126,7 @@ bool check_answers(struct Solutions* solutions_pointer, struct Solutions* right_
 }
 
 
-void print_test(bool is_passed, int test_number, struct Solutions* solutions_pointer,  struct Solutions* right_solutions_pointer, struct Coefficients* coef_pointer) /// if the test is passed, notifies about it. Сalls print_test_info for test details if it fails
+void print_test(const bool is_passed, const int test_number, const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer, const struct Coefficients* coef_pointer) /// if the test is passed, notifies about it. Сalls print_test_info for test details if it fails
 {
     printf("test %d: ", test_number);
 
@@ -149,7 +149,7 @@ void print_test(bool is_passed, int test_number, struct Solutions* solutions_poi
 }
 
 
-void print_test_info(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer)/// Detailed information about the test. Calls the print_solutions function from main.cpp
+void print_test_info(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer)/// Detailed information about the test. Calls the print_solutions function from main.cpp
 {
     printf("right answers:\n");
     print_solutions(right_solutions_pointer);
