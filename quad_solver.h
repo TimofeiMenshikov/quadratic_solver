@@ -7,9 +7,6 @@ header file with constants, function declarations, standard includes
 #ifndef QUAD_SOLVER_H
 #define QUAD_SOLVER_H
 
-
-
-
 #define MY_ASSERT(bool_expression, error_code)      \
 if (!bool_expression)                               \
 {                                                   \
@@ -84,8 +81,8 @@ int release();
 void nulling_answers(struct Solutions* solutions_pointer);
 void nulling_coefficients(struct Coefficients* coef_pointer);
 
-bool is_equal(double first_number, double second_number);
-int comparison_of_two_numbers(double first_number_pointer, double second_number_pointer);
+bool is_equal(const double first_number, const double second_number);
+int comparison_of_two_numbers(const double first_number_pointer, const double second_number_pointer);
 
 bool is_not_inputed(double* one_coef_pointer);
 void one_coef_input(double* one_coef_pointer);
@@ -93,16 +90,16 @@ void coef_input(struct Coefficients* coef_pointer);
 
 int input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_solutions_pointer, FILE* inputfile);
 
-int solve_quadratic(struct Coefficients* coef_pointer, double* solutions_array);
-int solve_linear(struct Coefficients* coef_pointer, double* solutions);
-int solve_equation(struct Coefficients* coef_pointer, double* solutions);
+int solve_quadratic(const struct Coefficients* coef_pointer, double solutions_array[]);
+int solve_linear(const struct Coefficients* coef_pointer, double solutions_array[]);
+int solve_equation(const struct Coefficients* coef_pointer, double solutions_array[]);
 
-void print_solutions(struct Solutions* solutions_pointer);
-void print_test_info(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer);
-void print_test(bool is_passed, int test_number, struct Solutions* solutions_pointer,  struct Solutions* right_solutions_pointer, struct Coefficients* coef_pointer);
+void print_solutions(const struct Solutions* solutions_pointer);
+void print_test_info(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer);
+void print_test(const bool is_passed, const int test_number, const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer, const struct Coefficients* coef_pointer);
 int print_error(int ERROR_CODE);
 
-bool check_answers(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer);
-bool check_solver(struct Solutions* solutions_pointer, struct Solutions* right_solutions_pointer);
+bool check_answers(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer);
+bool check_solver(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer);
 
 #endif /* QUAD_SOLVER_H */
