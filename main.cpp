@@ -50,13 +50,13 @@ void clean_buffer()  ///clears the input stream until the end of line character
 }
 
 
-bool is_equal(double first_number, double second_number) ///checks if two numbers are equal
+bool is_equal(const double first_number, const double second_number) ///checks if two numbers are equal
 {
     return (fabs(first_number - second_number) < EPS);
 }
 
 
-int comparison_of_two_numbers(double first_number, double second_number) ///comparison of two double numbers with using epsilon
+int comparison_of_two_numbers(const double first_number, const double second_number) ///comparison of two double numbers with using epsilon
 {
     if ((first_number - second_number) > EPS)
     {
@@ -109,7 +109,7 @@ void coef_input(struct Coefficients* coef_pointer)  /// introduces coefficients.
 }
 
 
-int solve_equation(struct Coefficients* coef_pointer, double solutions_array[]) /// solves equatation ax^2 + bx + c = 0
+int solve_equation(const struct Coefficients* coef_pointer, double solutions_array[]) /// solves equatation ax^2 + bx + c = 0
 {
     int num_of_solutions = INVALID_NUMBER;
 
@@ -126,7 +126,7 @@ int solve_equation(struct Coefficients* coef_pointer, double solutions_array[]) 
 }
 
 
-int solve_linear(struct Coefficients* coef_pointer, double solutions_array[]) /// solves equatation bx + c = 0
+int solve_linear(const struct Coefficients* coef_pointer, double solutions_array[]) /// solves equatation bx + c = 0
 {
     int num_of_solutions = INVALID_NUMBER;
 
@@ -155,7 +155,7 @@ int solve_linear(struct Coefficients* coef_pointer, double solutions_array[]) //
 }
 
 
-int solve_quadratic(struct Coefficients* coef_pointer, double solutions_array[]) ///solves equatation ax^2 + bx + c = 0 (a != 0)
+int solve_quadratic(const struct Coefficients* coef_pointer, double solutions_array[]) ///solves equatation ax^2 + bx + c = 0 (a != 0)
 {
     int num_of_solutions = INVALID_NUMBER;
 
@@ -195,7 +195,7 @@ int solve_quadratic(struct Coefficients* coef_pointer, double solutions_array[])
 }
 
 
-void print_solutions(struct Solutions* solutions_pointer)   ///displays solutions and their numbers
+void print_solutions(const struct Solutions* solutions_pointer)   ///displays solutions and their numbers
 {
     if (solutions_pointer->number != INF_SOLUTIONS)
     {
