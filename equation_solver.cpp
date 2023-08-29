@@ -107,13 +107,13 @@ int solve_quadratic(struct Coefficients* coef_pointer, double solutions_array[])
 }
 
 
-bool is_equal(double first_number, double second_number) ///checks if two numbers are equal
+bool is_equal(const double first_number, const double second_number) ///checks if two numbers are equal
 {
     return (fabs(first_number - second_number) < EPS);
 }
 
 
-int comparison_of_two_numbers(double first_number, double second_number) ///comparison of two double numbers with using epsilon
+int comparison_of_two_numbers(const double first_number, const double second_number) ///comparison of two double numbers with using epsilon
 {
     if ((first_number - second_number) > EPS)
     {

@@ -14,25 +14,18 @@ main program with int main() function inside
 #include "print.h"
 #include "functions_with_strings.h"
 
+char* parse_cmd_args(const int argc, const char** argv); ///reads the name of the test file from the cmd arguments
 
-int main(int argc, char *argv[])
+int main(const int argc, const char* argv[])
 {
     #ifdef COLOR_COMANDLINE
         remove_color_cmd();
     #endif /* COLOR_COMANDLINE */
 
-    char* filename;
-
-    if (argc >= 2)
-    {
-        filename = argv[1];        
-    }
-    else
-    {
-        filename = "input.txt";
-    }
+    //TODO const char * const filename;
 
     #ifdef TEST
+        char* filename = parse_cmd_args(argc, argv);
         test(filename);
     #else /* TEST */
         release();

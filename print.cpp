@@ -32,8 +32,9 @@ void print_solutions(const struct Solutions* solutions_pointer)   ///displays so
 }
 
 
+/* color cmd*/
 #ifdef COLOR_COMANDLINE
-    void color_cmd(short unsigned int text_color) ///the following text in the console will be of the specified color
+    void color_cmd(const short unsigned int text_color) ///the following text in the console will be of the specified color
     {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), text_color);
     }
@@ -60,7 +61,8 @@ void colored_print(const char* text, short unsigned int text_color  /* COLOR_COM
 }
 
 
-int print_error(int error_code) 
+/* assert */
+int print_error(const int error_code)   /// function, that helps my_assert print error_code
 {                   
     switch(error_code) 
     {                           
@@ -82,4 +84,38 @@ int print_error(int error_code)
         default:                                   
             return NO_ERROR;       
     }
-}        
+}      
+
+
+/* test */
+void print_test(const bool is_passed, const int test_number, const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer, const struct Coefficients* coef_pointer) /// if the test is passed, notifies about it. Сalls print_test_info for test details if it fails
+{
+    printf("test %d: ", test_number);
+
+    if (is_passed)
+    {
+        colored_print("OK\n", light_green);
+
+        printf("equation: %f * x^2 + %f * x + %f = 0\n", coef_pointer->a, coef_pointer->b, coef_pointer->c);
+    }
+    else
+    {
+        colored_print("failed\n", red);
+
+        printf("equation: %f * x^2 + %f * x + %f = 0\n", coef_pointer->a, coef_pointer->b, coef_pointer->c);
+
+        print_test_info(solutions_pointer, right_solutions_pointer);
+    }
+
+    printf("\n");
+}
+
+
+void print_test_info(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer)/// Detailed information about the test. Calls the print_solutions function from main.cpp
+{
+    printf("right answers:\n");
+    print_solutions(right_solutions_pointer);
+
+    printf("computer answers:\n");
+    print_solutions(solutions_pointer);
+}
