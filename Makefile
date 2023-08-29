@@ -6,15 +6,32 @@ SOURCES = main.cpp test.cpp input.cpp solve_equation.cpp print.cpp reinit.cpp nu
 
 OBJECTS = $(SOURCES: .cpp = .o)
 
-.PHONY: test
-test: main.exe
+TEST = True
+INPUT_DEBUG = False
+COLOR_CMD = False
+
+ifeq ($(TEST), True)   
+	CXXFLAGS += -DTEST
+endif
+
+ifeq ($(INPUT_DEBUG), True)
+	CXXFLAGS += -DINPUT_DEBUG
+endif
+
+ifeq ($(COLOR_CMD), True)
+	CXXFLAGS += -COLOR_CMD
+endif
+
+
+.PHONY: all
+all: main.exe	
 	main.exe $(FILENAME)
 
 main.exe: $(OBJECTS)
-	$(CXX) $^ $(CXXFLAGS) -DTEST -o $@ 
+	$(CXX) $^ $(CXXFLAGS) -o $@ 
 
 %.o: %.cpp
-	$(CC) -c $(CXXLAGS) $< -o $@
+	$(CC) -c $(CXXLAGS) $< 
 
 
 .PHONY: clean_exe
