@@ -1,3 +1,8 @@
+/*!
+\file
+MY_ASSERT is able to catch errors and issue their codes without breaking the program, but ending the process by exiting functions
+*/
+
 #ifndef MY_ASSERT_H
 #define MY_ASSERT_H
 

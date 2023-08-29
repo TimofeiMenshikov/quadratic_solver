@@ -1,3 +1,8 @@
+/*!
+\file
+contains functions to solve equatations: ax^2 + bx + c = 0; bx + c = 0
+*/
+
 #include <stdio.h>
 #include <math.h>
 
@@ -5,8 +10,6 @@
 #include "my_assert.h"
 #include "solve_equation.h"
 #include "number_comparison.h"
-
-
 
 int solve_equation(const struct Coefficients* coef_pointer, double solutions_array[]) /// solves equatation ax^2 + bx + c = 0
 {

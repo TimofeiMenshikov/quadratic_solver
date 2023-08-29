@@ -43,7 +43,7 @@ struct Solutions /// the structure includes an array of 2 elements - the maximum
     int number = INVALID_NUMBER; ///< This is number of equation solutions. Uses enum number_of_solutions in quad_solver.h
 };
 
-int test();
+int test(const char* filename);
 
 int release();
 

@@ -1,3 +1,9 @@
+/*!
+\file
+functions to input from file or from cmd
+*/
+
+
 #include <stdio.h>
 #include <math.h>
 

@@ -1,6 +1,5 @@
 /*!
 \file
-
 the program contains functions called in main.cpp to test the quadratic equation solver
 */
 
@@ -18,12 +17,11 @@ the program contains functions called in main.cpp to test the quadratic equation
 #include "reinit.h"
 
 
-int test()  ///test run
+int test(const char* filename)  ///test run
 {   
-
     FILE* inputfile;
 
-    MY_ASSERT(((inputfile = fopen("input.txt", "r")) != NULL), FILE_IS_NOT_OPENED);
+    MY_ASSERT(((inputfile = fopen(filename, "r")) != NULL), FILE_IS_NOT_OPENED);
 
     struct Coefficients coefficients; // a, b, c
     struct Solutions solutions;

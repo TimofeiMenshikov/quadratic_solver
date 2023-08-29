@@ -12,18 +12,28 @@ main program with int main() function inside
 #include "input.h"
 #include "solve_equation.h"
 #include "print.h"
+#include "functions_with_strings.h"
 
 
-int main()
+int main(int argc, char *argv[])
 {
-    printf("name of the file is: %s\n", __FILE__);
-
     #ifdef COLOR_COMANDLINE
         remove_color_cmd();
     #endif /* COLOR_COMANDLINE */
 
+    char* filename;
+
+    if (argc >= 2)
+    {
+        filename = argv[1];        
+    }
+    else
+    {
+        filename = "input.txt";
+    }
+
     #ifdef TEST
-        test();
+        test(filename);
     #else /* TEST */
         release();
     #endif /* TEST */

@@ -1,3 +1,8 @@
+/*!
+\file
+contains functions for assigning invalid values to variables
+*/
+
 #include <math.h>
 #include "reinit.h"
 #include "quad_solver.h"

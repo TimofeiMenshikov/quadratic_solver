@@ -1,3 +1,8 @@
+/*!
+\file
+functions to compare two double numbers
+*/
+
 #include <stdio.h>
 #include <math.h>
 #include "number_comparison.h"

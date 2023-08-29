@@ -1,3 +1,9 @@
+/*!
+\file
+functions to print user, test information
+colored text is supported 
+*/
+
 #include <stdio.h>
 #include <math.h>
 

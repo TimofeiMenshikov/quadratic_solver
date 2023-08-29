@@ -1,3 +1,8 @@
+/*!
+\file
+contains functinos, that may solve equatations: ax^2 + bx + c = 0; bx + c = 0
+*/
+
 #include "quad_solver.h"
 #include "color_cmd.h"
 
