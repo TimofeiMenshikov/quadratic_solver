@@ -7,7 +7,7 @@ contains functions for assigning invalid values to variables
 #include "reinit.h"
 #include "quad_solver.h"
 
-void nulling_coefficients(struct Coefficients* coef_pointer)  ///turns coefficients a, b, c into NAN
+void nulling_coefficients(struct Coefficients* const coef_pointer)  ///turns coefficients a, b, c into NAN
 {
     coef_pointer->a = NAN;
     coef_pointer->b = NAN;
@@ -15,7 +15,7 @@ void nulling_coefficients(struct Coefficients* coef_pointer)  ///turns coefficie
 }
 
 
-void nulling_answers(struct Solutions* solutions_pointer) ///turns solutions x1, x2 into NAN
+void nulling_answers(struct Solutions* const solutions_pointer) ///turns solutions x1, x2 into NAN
 {
     (solutions_pointer->arr)[0] = NAN;
     (solutions_pointer->arr)[0] = NAN;

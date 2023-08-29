@@ -6,7 +6,7 @@ functions, that work with strings: copy, comparison, research them
 #include <assert.h>
 #include "functions_with_strings.h"
 
-char* my_strcpy(char* string_to_copy, const char* source_string)
+char* my_strcpy(char* const string_to_copy, const char* const source_string)
 {
 	assert(source_string != NULL);
 	assert(string_to_copy != NULL);
@@ -22,7 +22,7 @@ char* my_strcpy(char* string_to_copy, const char* source_string)
 }
 
 
-int find_str_len(const char* string)
+int find_str_len(const char* const string)
 {
 	int string_number = 0;
 	while (string[string_number] != '\0')
@@ -34,7 +34,7 @@ int find_str_len(const char* string)
 }
 
 
-void string_research(const char* string)
+void string_research(const char* const string)
 {
 	for (size_t string_number = 0; string[string_number] != '\0'; string_number++)
 	{
@@ -45,7 +45,7 @@ void string_research(const char* string)
 }
 
 
-bool my_strcmd(const char* string1, const char* string2)
+bool my_strcmd(const char* const string1, const char* const string2)
 {
 	size_t string_number = 0;
 	for (string_number = 0; string1[string_number] != '\0'; string_number++)

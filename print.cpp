@@ -12,20 +12,20 @@ colored text is supported
 #include "print.h"
 
 
-void print_solutions(const struct Solutions* solutions_pointer)   ///displays solutions and their numbers
+void print_solutions(const struct Solutions* const solutions_pointer)   ///displays solutions and their numbers
 {
     if (solutions_pointer->number != INF_SOLUTIONS)
     {
-        printf("%d solution(s) in real numbers\n", solutions_pointer->number);
+        printf("%lld solution(s) in real numbers\n", solutions_pointer->number);
     }
     else
     {
         printf("inf solutions in real numbers\n");
     }
 
-    for (int i = 0; i < solutions_pointer->number; i++)
+    for (ssize_t solution_number = 0; solution_number < solutions_pointer->number; solution_number++)
     {
-       printf("x%d = %f ", i + 1, solutions_pointer->arr[i]);
+       printf("x%lld = %f ", solution_number + 1, solutions_pointer->arr[solution_number]);
     }
 
     printf("\n");
@@ -47,7 +47,7 @@ void print_solutions(const struct Solutions* solutions_pointer)   ///displays so
 #endif /* COLOR_COMANDLINE */
 
 
-void colored_print(const char* text, short unsigned int text_color  /* COLOR_COMANDLINE*/) /// can make text color, but does not work with variables
+void colored_print(const char* const text, short unsigned int text_color  /* COLOR_COMANDLINE*/) /// can make text color, but does not work with variables
 {   
     #ifdef COLOR_COMANDLINE
         color_cmd(text_color);
@@ -88,7 +88,7 @@ int print_error(const int error_code)   /// function, that helps my_assert print
 
 
 /* test */
-void print_test(const bool is_passed, const int test_number, const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer, const struct Coefficients* coef_pointer) /// if the test is passed, notifies about it. Сalls print_test_info for test details if it fails
+void print_test(const bool is_passed, const int test_number, const struct Solutions* const solutions_pointer, const struct Solutions* const right_solutions_pointer, const struct Coefficients* const coef_pointer) /// if the test is passed, notifies about it. Сalls print_test_info for test details if it fails
 {
     printf("test %d: ", test_number);
 
@@ -111,7 +111,7 @@ void print_test(const bool is_passed, const int test_number, const struct Soluti
 }
 
 
-void print_test_info(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer)/// Detailed information about the test. Calls the print_solutions function from main.cpp
+void print_test_info(const struct Solutions* const solutions_pointer, const struct Solutions* const right_solutions_pointer)/// Detailed information about the test. Calls the print_solutions function from main.cpp
 {
     printf("right answers:\n");
     print_solutions(right_solutions_pointer);

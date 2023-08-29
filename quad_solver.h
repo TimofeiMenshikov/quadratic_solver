@@ -40,14 +40,14 @@ struct Solutions /// the structure includes an array of 2 elements - the maximum
 {
     double arr[2] = {NAN, NAN}; ///< This is array of equation solutions
 
-    int number = INVALID_NUMBER; ///< This is number of equation solutions. Uses enum number_of_solutions in quad_solver.h
+    ssize_t number = INVALID_NUMBER; ///< This is number of equation solutions. Uses enum number_of_solutions in quad_solver.h
 };
 
-int test(const char* filename);
+int test(const char* const filename);
 
 int release();
 
-bool check_answers(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer);
-bool check_solver(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer);
+bool check_answers(const struct Solutions* const solutions_pointer, const struct Solutions* const right_solutions_pointer);
+bool check_solver(const struct Solutions* const solutions_pointer, const struct Solutions* const right_solutions_pointer);
 
 #endif /* QUAD_SOLVER_H */

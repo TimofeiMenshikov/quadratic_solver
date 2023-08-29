@@ -17,7 +17,7 @@ the program contains functions called in main.cpp to test the quadratic equation
 #include "reinit.h"
 
 
-int test(const char* filename)  ///test run
+int test(const char* const filename)  ///test run
 {   
     FILE* inputfile;
 
@@ -57,7 +57,7 @@ int test(const char* filename)  ///test run
 }
 
 
-bool check_solver(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer)    /// checks solutions and their number with standards read from a file
+bool check_solver(const struct Solutions* const solutions_pointer, const struct Solutions* const right_solutions_pointer)    /// checks solutions and their number with standards read from a file
 {
     if (solutions_pointer->number != right_solutions_pointer->number)
     {
@@ -71,15 +71,15 @@ bool check_solver(const struct Solutions* solutions_pointer, const struct Soluti
 }
 
 
-bool check_answers(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer)   /// compares an array of solutions with a benchmark read from a file.
+bool check_answers(const struct Solutions* const solutions_pointer, const struct Solutions* const right_solutions_pointer)   /// compares an array of solutions with a benchmark read from a file.
 {
     bool is_checked = false;
 
     int matches = 0;
 
-    for (int solution_number = 0; solution_number < solutions_pointer->number; solution_number++)
+    for (ssize_t solution_number = 0; solution_number < solutions_pointer->number; solution_number++)
     {
-        for (int right_solution_number = 0; right_solution_number < right_solutions_pointer->number; right_solution_number++)
+        for (ssize_t right_solution_number = 0; right_solution_number < right_solutions_pointer->number; right_solution_number++)
         {
             if (is_equal((solutions_pointer->arr)[solution_number], (right_solutions_pointer->arr)[right_solution_number]))
             {

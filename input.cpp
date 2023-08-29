@@ -13,7 +13,7 @@ functions to input from file or from cmd
 
 /* cmd args */
 
-const char* parse_cmd_args(const int argc, const char** argv)
+const char* parse_cmd_args(const int argc, const char** const argv)
 {
     const char* filename;
 
@@ -32,13 +32,13 @@ const char* parse_cmd_args(const int argc, const char** argv)
 
 
 /* from file */
-int input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_solutions_pointer, FILE* inputfile)  ///reads from the file the coefficients a, b, c of the equation ax^2 + bx + c = 0; number of decisions; solution of this equation
+int input_from_file(struct Coefficients* const coef_pointer, struct Solutions* const right_solutions_pointer, FILE* const inputfile)  ///reads from the file the coefficients a, b, c of the equation ax^2 + bx + c = 0; number of decisions; solution of this equation
 {
-    fscanf(inputfile, "%lf %lf %lf %d" , &(coef_pointer->a), &(coef_pointer->b), &(coef_pointer->c), &(right_solutions_pointer->number));
+    fscanf(inputfile, "%lf %lf %lf %lld" , &(coef_pointer->a), &(coef_pointer->b), &(coef_pointer->c), &(right_solutions_pointer->number));
 
     ARE_COEFFICIENTS_NAN(coef_pointer); 
 
-    DEBUG_EXEC(printf("Scanned coeffs and amount: %lf, %lf, %lf, %d\n", coef_pointer->a, coef_pointer->b, coef_pointer->c, right_solutions_pointer->number));
+    DEBUG_EXEC(printf("Scanned coeffs and amount: %lf, %lf, %lf, %lld\n", coef_pointer->a, coef_pointer->b, coef_pointer->c, right_solutions_pointer->number));
     
     if (right_solutions_pointer->number == TWO_SOLUTIONS)
     {
@@ -62,7 +62,7 @@ int input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_s
 
 
 /* from cmd */
-void coef_input(struct Coefficients* coef_pointer)  /// introduces coefficients. if coefficient is entered incorrectly, calls clean_buffer
+void coef_input(struct Coefficients* const coef_pointer)  /// introduces coefficients. if coefficient is entered incorrectly, calls clean_buffer
 {
     printf("enter 3 numbers - coefficients a, b, c in equation: ax^2 + bx + c = 0\n");
 
@@ -79,7 +79,7 @@ void coef_input(struct Coefficients* coef_pointer)  /// introduces coefficients.
 }
 
 
-void one_coef_input(double* one_coef_pointer) ///a function for entering one coefficient with a check for the correctness of the input
+void one_coef_input(double* const one_coef_pointer) ///a function for entering one coefficient with a check for the correctness of the input
 {
     while (is_not_inputed(one_coef_pointer))
     {
@@ -94,7 +94,7 @@ void one_coef_input(double* one_coef_pointer) ///a function for entering one coe
 }
 
 
-bool is_not_inputed(double* one_coef_pointer) ///returns true if scanf did not work correctly
+bool is_not_inputed(double* const one_coef_pointer) ///returns true if scanf did not work correctly
 {
     return scanf("%lf", one_coef_pointer) == 0;
 }

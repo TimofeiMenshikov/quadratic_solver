@@ -12,12 +12,12 @@
     #define DEBUG_EXEC(function)
 #endif /* INPUT_DEBUG */ 
 
+int input_from_file(struct Coefficients* const coef_pointer, struct Solutions* const right_solutions_pointer, FILE* const inputfile);
 
-void coef_input(struct Coefficients* coef_pointer);
-void one_coef_input(double* one_coef_pointer);
-bool is_not_inputed(double* one_coef_pointer);
+void coef_input(struct Coefficients* const coef_pointer);
+void one_coef_input(double* const one_coef_pointer);
+bool is_not_inputed(double* const one_coef_pointer);
 
-int input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_solutions_pointer, FILE* inputfile);
 
 void clean_buffer();
 
