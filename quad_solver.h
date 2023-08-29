@@ -7,29 +7,7 @@ header file with constants, function declarations, standard includes
 #ifndef QUAD_SOLVER_H
 #define QUAD_SOLVER_H
 
-#define MY_ASSERT(bool_expression, error_code)      \
-if (!bool_expression)                               \
-{                                                   \
-    printf("line %d %s: ", __LINE__, __FILE__);     \
-    return print_error(error_code);                 \
-}                                                   
-                                                                      
 
-#define ARE_COEFFICIENTS_NAN(coef_pointer)          \
-{                                                   \
-    MY_ASSERT(!isnan((coef_pointer)->a), ISNAN);    \
-    MY_ASSERT(!isnan((coef_pointer)->b), ISNAN);    \
-    MY_ASSERT(!isnan((coef_pointer)->c), ISNAN);    \
-}                                                   
-
-
-//#include <TXLib.h>
-#include <stdio.h>
-#include <math.h>
-#include <assert.h>
-
-/// constant for comparison of two numbers
-const double EPS = 0.0000001;
 
 enum number_of_solutions  /// defines solution number constants for the solutions.numbrer variable
 {
@@ -39,12 +17,6 @@ enum number_of_solutions  /// defines solution number constants for the solution
     TWO_SOLUTIONS  = 2
 };
 
-enum number_comparison    /// constants for comparison_of_two_numbers function
-{
-    FIRST_IS_LESS = -1,
-    EQUAL = 0,
-    FIRST_IS_BIGGER = 1
-};
 
 enum error_number /// in case of an error, the function outputs an error code
 {
@@ -71,33 +43,9 @@ struct Solutions /// the structure includes an array of 2 elements - the maximum
     int number = INVALID_NUMBER; ///< This is number of equation solutions. Uses enum number_of_solutions in quad_solver.h
 };
 
-
-void clean_buffer();
-
 int test();
 
 int release();
-
-void nulling_answers(struct Solutions* solutions_pointer);
-void nulling_coefficients(struct Coefficients* coef_pointer);
-
-bool is_equal(const double first_number, const double second_number);
-int comparison_of_two_numbers(const double first_number_pointer, const double second_number_pointer);
-
-bool is_not_inputed(double* one_coef_pointer);
-void one_coef_input(double* one_coef_pointer);
-void coef_input(struct Coefficients* coef_pointer);
-
-int input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_solutions_pointer, FILE* inputfile);
-
-int solve_quadratic(const struct Coefficients* coef_pointer, double solutions_array[]);
-int solve_linear(const struct Coefficients* coef_pointer, double solutions_array[]);
-int solve_equation(const struct Coefficients* coef_pointer, double solutions_array[]);
-
-void print_solutions(const struct Solutions* solutions_pointer);
-void print_test_info(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer);
-void print_test(const bool is_passed, const int test_number, const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer, const struct Coefficients* coef_pointer);
-int print_error(int ERROR_CODE);
 
 bool check_answers(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer);
 bool check_solver(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer);

@@ -5,8 +5,18 @@ the program contains functions called in main.cpp to test the quadratic equation
 */
 
 
+#include <stdio.h>
+#include <math.h>
+
 #include "quad_solver.h"
 #include "color_cmd.h"
+#include "my_assert.h"
+#include "solve_equation.h"
+#include "input.h"
+#include "print.h"
+#include "number_comparison.h"
+#include "reinit.h"
+
 
 int test()  ///test run
 {   
@@ -49,45 +59,6 @@ int test()  ///test run
 }
 
 
-int input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_solutions_pointer, FILE* inputfile)  ///reads from the file the coefficients a, b, c of the equation ax^2 + bx + c = 0; number of decisions; solution of this equation
-{
-    fscanf(inputfile, "%lf %lf %lf %d" , &(coef_pointer->a), &(coef_pointer->b), &(coef_pointer->c), &(right_solutions_pointer->number));
-
-    ARE_COEFFICIENTS_NAN(coef_pointer); 
-
-    #ifdef INPUT_DEBUG
-        printf("Scanned coeffs and amount: %lf, %lf, %lf, %d\n", coef_pointer->a, coef_pointer->b, coef_pointer->c, right_solutions_pointer->number);
-    #endif /* INPUT_DEBUG */
-    
-    if (right_solutions_pointer->number == TWO_SOLUTIONS)
-    {
-        fscanf(inputfile, "%lf %lf", &((right_solutions_pointer->arr)[0]), &((right_solutions_pointer->arr)[1]));
-
-
-        #ifdef INPUT_DEBUG
-            printf("Scanned two right solutions: %lf, %lf\n", right_solutions_pointer->arr[0], right_solutions_pointer->arr[1]);
-        #endif /* INPUT_DEBUG */
-
-    }
-    else if (right_solutions_pointer->number == ONE_SOLUTION)
-    {
-        fscanf(inputfile, "%lf", &((right_solutions_pointer->arr)[0]));
-
-        #ifdef INPUT_DEBUG
-            printf("Scanned one right solution: %lf\n", right_solutions_pointer->arr[0]);
-        #endif /* INPUT_DEBUG */
-    }
-    else
-    {
-        #ifdef INPUT_DEBUG
-            printf("Scanned zero right solutions\n");
-        #endif /* INPUT_DEBUG */
-    }
-
-    return 0;
-}
-
-
 bool check_solver(const struct Solutions* solutions_pointer, const struct Solutions* right_solutions_pointer)    /// checks solutions and their number with standards read from a file
 {
     if (solutions_pointer->number != right_solutions_pointer->number)
@@ -96,9 +67,7 @@ bool check_solver(const struct Solutions* solutions_pointer, const struct Soluti
         return false;
     }
 
-    #ifdef INPUT_DEBUG
-        printf("the number of solutions is correct\n");
-    #endif /* INPUT_DEBUG */
+    DEBUG_EXEC(printf("the number of solutions is correct\n"));
     
     return check_answers(solutions_pointer, right_solutions_pointer);
 }
@@ -158,4 +127,4 @@ void print_test_info(const struct Solutions* solutions_pointer, const struct Sol
     print_solutions(solutions_pointer);
 }
 
-
+ 
