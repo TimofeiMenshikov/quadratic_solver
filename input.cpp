@@ -11,6 +11,26 @@ functions to input from file or from cmd
 #include "my_assert.h"
 #include "quad_solver.h"
 
+/* cmd args */
+
+const char* parse_cmd_args(const int argc, const char** argv)
+{
+    const char* filename;
+
+    if (argc >= 2) 
+    {
+        filename = argv[1];        
+    }
+    else
+    {
+        filename = "input.txt"; 
+    }
+
+    return filename;
+}
+
+
+
 /* from file */
 int input_from_file(struct Coefficients* coef_pointer, struct Solutions* right_solutions_pointer, FILE* inputfile)  ///reads from the file the coefficients a, b, c of the equation ax^2 + bx + c = 0; number of decisions; solution of this equation
 {
