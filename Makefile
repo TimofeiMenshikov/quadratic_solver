@@ -3,12 +3,11 @@ FILENAME = input.txt
 CXX = g++
 
 SOURCES = main.cpp test.cpp input.cpp solve_equation.cpp print.cpp reinit.cpp number_comparison.cpp
-
-OBJECTS = $(SOURCES: .cpp = .o)
-
+OBJECTS = main.o test.o input.o solve_equation.o print.o reinit.o number_comparison.o
+#OBJECTS = $(SOURCES: %.cpp = %.o)
 TEST = True
 INPUT_DEBUG = False
-COLOR_CMD = False
+COLOR_CMD = False # TODO write in readme
 
 ifeq ($(TEST), True)   
 	CXXFLAGS += -DTEST
@@ -31,7 +30,8 @@ main.exe: $(OBJECTS)
 	$(CXX) $^ $(CXXFLAGS) -o $@ 
 
 %.o: %.cpp
-	$(CC) -c $(CXXLAGS) $< 
+	@echo [CXX] [CXXFLAGS]  -c -o  $@ $< 
+	@$(CXX) $(CXXFLAGS) -c -o  $@ $< 
 
 
 .PHONY: clean_exe
