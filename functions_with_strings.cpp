@@ -48,7 +48,7 @@ void string_research(const char* const string)
 bool my_strcmd(const char* const string1, const char* const string2)
 {
 	size_t string_number = 0;
-	for (string_number = 0; string1[string_number] != '\0'; string_number++)
+	for (string_number = 0; string1[string_number] != '\0' and string2[string_number] != '\0'; string_number++)
 	{
 		if (string1[string_number] != string2[string_number])
 		{
@@ -56,6 +56,6 @@ bool my_strcmd(const char* const string1, const char* const string2)
 		}
 	}
 
-	return string2 == '\0';
+	return string2[string_number] == '\0';
 }
 
